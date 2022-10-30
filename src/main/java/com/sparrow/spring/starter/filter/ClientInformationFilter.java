@@ -4,7 +4,7 @@ import com.sparrow.protocol.ClientInformation;
 import com.sparrow.protocol.ThreadContext;
 import com.sparrow.protocol.constant.ClientInfoConstant;
 import com.sparrow.protocol.enums.Platform;
-import com.sparrow.support.web.ServletUtility;
+import com.sparrow.spring.starter.SpringServletContainer;
 import com.sparrow.utility.StringUtility;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.BrowserType;
@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
 public class ClientInformationFilter implements Filter {
     private static Logger logger = LoggerFactory.getLogger(ClientInformationFilter.class);
     @Inject
-    private ServletUtility servletUtility;
+    private SpringServletContainer springServletContainer;
 
     @Override public void doFilter(ServletRequest req, ServletResponse response,
         FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         ClientInformation clientInformation = new com.sparrow.protocol.ClientInformation();
-        clientInformation.setIp(servletUtility.getClientIp(req));
+        clientInformation.setIp(springServletContainer.getClientIp());
         String appId = request.getHeader(ClientInfoConstant.APP_ID);
         if (!StringUtility.isNullOrEmpty(appId)) {
             clientInformation.setAppId(Integer.parseInt(appId));

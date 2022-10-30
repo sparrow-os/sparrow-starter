@@ -16,7 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private static Logger logger= LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    
     @Inject
     private ServletContainer servletContainer;
 
@@ -35,8 +36,9 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public Object exceptionHandler(HttpServletRequest request, Exception exception,RedirectAttributes attr) throws Exception {
-        logger.error("global exception ",exception);
+    public Object exceptionHandler(HttpServletRequest request, Exception exception,
+        RedirectAttributes attr) throws Exception {
+        logger.error("global exception ", exception);
         String contentType = request.getContentType();
         if (Constant.CONTENT_TYPE_FORM.equals(contentType)) {
             ModelAndView mv = new ModelAndView("redirect:/error");
