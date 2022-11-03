@@ -28,7 +28,7 @@ public class VOListJsonMessageConverter extends AbstractHttpMessageConverter<Lis
         if (clazz.getTypeParameters().length == 0) {
             return false;
         }
-        return clazz.getTypeParameters()[0].getGenericDeclaration().isAssignableFrom(clazz);
+        return clazz.getTypeParameters()[0].getGenericDeclaration().isAssignableFrom(VO.class);
     }
 
     @Override
