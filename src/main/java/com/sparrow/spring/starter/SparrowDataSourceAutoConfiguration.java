@@ -3,11 +3,14 @@ package com.sparrow.spring.starter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.sparrow.datasource.DataSourceFactoryImpl;
 import javax.inject.Inject;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DatasourceAutoConfiguration {
+@ConditionalOnBean(SparrowConfig.class)
+public class SparrowDataSourceAutoConfiguration {
 
     @Inject
     private SparrowConfig sparrowConfig;

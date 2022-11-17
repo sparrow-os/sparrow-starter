@@ -31,7 +31,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private VOJsonMessageConverter jsonMessageConverter;
 
     @Inject
-    private VOListJsonMessageConverter listJsonMessageConverter;
+    private ListJsonMessageConverter listJsonMessageConverter;
 
     @Inject
     private ClientInfoArgumentResolvers clientInfoArgumentResolvers;

@@ -3,7 +3,6 @@ package com.sparrow.spring.starter;
 import com.sparrow.core.spi.JsonFactory;
 import com.sparrow.json.Json;
 import com.sparrow.protocol.Result;
-import com.sparrow.protocol.VO;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -16,10 +15,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
 @Named
-public class VOListJsonMessageConverter extends AbstractHttpMessageConverter<List<VO>> {
+public class ListJsonMessageConverter extends AbstractHttpMessageConverter<List<?>> {
     private Json json = JsonFactory.getProvider();
-
-    public VOListJsonMessageConverter() {
+    public ListJsonMessageConverter() {
         super(new MediaType("application", "json", StandardCharsets.UTF_8));
     }
 
@@ -28,19 +26,21 @@ public class VOListJsonMessageConverter extends AbstractHttpMessageConverter<Lis
         if (clazz.getTypeParameters().length == 0) {
             return false;
         }
-        return clazz.getTypeParameters()[0].getGenericDeclaration().isAssignableFrom(VO.class);
+        if(List.class.isAssignableFrom(clazz)){
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    protected List<VO> readInternal(Class<? extends List<VO>> clazz,
-        HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+    @Override protected List<?> readInternal(Class<? extends List<?>> aClass,
+        HttpInputMessage message) throws IOException, HttpMessageNotReadableException {
         return null;
     }
 
     @Override
-    public void writeInternal(List<VO> voList,
+    public void writeInternal(List<?> voList,
         HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        Result<List<VO>> result = new Result<List<VO>>(voList);
+        Result<List<?>> result = new Result<>(voList);
         outputMessage.getBody().write(this.json.toString(result).getBytes());
     }
 }
