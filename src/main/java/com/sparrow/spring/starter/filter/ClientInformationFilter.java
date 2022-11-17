@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 @Named
 public class ClientInformationFilter implements Filter {
     private static Logger logger = LoggerFactory.getLogger(ClientInformationFilter.class);
+
     @Inject
     private SpringServletContainer springServletContainer;
 
