@@ -1,6 +1,9 @@
 package com.sparrow.spring.starter;
 
+import com.sparrow.spring.starter.Interceptor.ParameterInterceptor;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
+import com.sparrow.spring.starter.filter.FlashFilter;
+import com.sparrow.spring.starter.filter.GlobalAttributeFilter;
 import com.sparrow.spring.starter.filter.LoginTokenFilter;
 import com.sparrow.spring.starter.message.converter.ListJsonMessageConverter;
 import com.sparrow.spring.starter.message.converter.VOJsonMessageConverter;
@@ -14,8 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -27,7 +32,13 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private LoginTokenFilter loginTokenFilter;
 
     @Inject
+    private FlashFilter flashFilter;
+
+    @Inject
     private ClientInformationFilter clientInformationFilter;
+
+    @Inject
+    private GlobalAttributeFilter globalAttributeFilter;
 
     @Inject
     private VOJsonMessageConverter jsonMessageConverter;
@@ -40,6 +51,31 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Inject
     private LoginTokenArgumentResolvers loginTokenArgumentResolvers;
+
+    @Inject
+    private ParameterInterceptor parameterInterceptor;
+
+    @Bean
+    public FilterRegistrationBean<Filter> flashFilterBean() {
+        FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
+        globalAttributeFilterBean.setFilter(flashFilter);
+        globalAttributeFilterBean.addUrlPatterns("/*");
+        globalAttributeFilterBean.setName("flashFilter");
+        globalAttributeFilterBean.setOrder(1);
+        //多个filter的时候order的数值越小 则优先级越高
+        return globalAttributeFilterBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<Filter> globalAttributeFilterBean() {
+        FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
+        globalAttributeFilterBean.setFilter(globalAttributeFilter);
+        globalAttributeFilterBean.addUrlPatterns("/*");
+        globalAttributeFilterBean.setName("globalAttributeFilter");
+        globalAttributeFilterBean.setOrder(1);
+        //多个filter的时候order的数值越小 则优先级越高
+        return globalAttributeFilterBean;
+    }
 
     @Bean
     public FilterRegistrationBean<Filter> clientInformationFilterBean() {
@@ -74,16 +110,18 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     /**
      * 配置静态访问资源
-     * <p>
-     * http://localhost:8000/s/static.html
      */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+//    }
 
     @Override public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.clientInfoArgumentResolvers);
         argumentResolvers.add(this.loginTokenArgumentResolvers);
+    }
+
+    @Override public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(this.parameterInterceptor);
     }
 }

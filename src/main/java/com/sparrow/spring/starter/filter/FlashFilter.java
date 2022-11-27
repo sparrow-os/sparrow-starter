@@ -1,0 +1,87 @@
+package com.sparrow.spring.starter.filter;
+
+import com.sparrow.core.Pair;
+import com.sparrow.protocol.constant.Constant;
+import com.sparrow.support.web.ServletUtility;
+import com.sparrow.utility.StringUtility;
+import java.io.IOException;
+import java.util.Map;
+import javax.inject.Named;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+@Named
+public class FlashFilter extends OncePerRequestFilter {
+    private ServletUtility servletUtility = ServletUtility.getInstance();
+
+    /**
+     * flash key -->/template/action-url.jsp  final url
+     * <p>
+     * direct mode action url-->action-url
+     * <p>
+     * <p>
+     * transit mode transit url--> transit-url?action_url
+     */
+    private boolean matchUrl(String flashKey, String actionKey, HttpServletRequest request) {
+        //redirect final jsp url
+        if (StringUtility.matchUrl(flashKey, actionKey)) {
+            return true;
+        }
+        //redirect action url
+        String actualUrl = servletUtility.assembleActualUrl(actionKey);
+        if (StringUtility.matchUrl(flashKey, actualUrl)) {
+            return true;
+        }
+        //transit final jsp url
+        actionKey = request.getQueryString();
+        if (actionKey == null) {
+            return false;
+        }
+        if (StringUtility.matchUrl(flashKey, actionKey)) {
+            return true;
+        }
+
+        //transit action url
+        String actualTransitUrl = servletUtility.assembleActualUrl(actionKey);
+        if (StringUtility.matchUrl(flashKey, actualTransitUrl)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain chain) throws ServletException, IOException {
+        String actionKey = servletUtility.getActionKey(request);
+        Pair<String, Map<String, Object>> sessionPair = (Pair<String, Map<String, Object>>) request.getSession().getAttribute(Constant.FLASH_KEY);
+        if (sessionPair == null) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        if (this.matchUrl(sessionPair.getFirst(), actionKey, request)) {
+            Map<String, Object> values = sessionPair.getSecond();
+            for (String key : values.keySet()) {
+                request.setAttribute(key, values.get(key));
+            }
+            chain.doFilter(request, response);
+            return;
+        }
+        //url换掉时，则session 被清空 （非include）
+        request.getSession().removeAttribute(Constant.FLASH_KEY);
+        chain.doFilter(request, response);
+    }
+
+    /**
+     * @param request
+     * @return
+     * @throws ServletException
+     * @see https://github.com/spring-projects/spring-boot/issues/7426
+     */
+    @Override protected boolean shouldNotFilter(HttpServletRequest request) {
+        String actionKey = servletUtility.getActionKey(request);
+        return actionKey.endsWith("favicon.ico");
+    }
+}
