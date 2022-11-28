@@ -4,11 +4,11 @@ import com.sparrow.spring.starter.Interceptor.ParameterInterceptor;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
 import com.sparrow.spring.starter.filter.GlobalAttributeFilter;
-import com.sparrow.spring.starter.filter.LoginTokenFilter;
+import com.sparrow.spring.starter.filter.LoginUserFilter;
 import com.sparrow.spring.starter.message.converter.ListJsonMessageConverter;
 import com.sparrow.spring.starter.message.converter.VOJsonMessageConverter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
-import com.sparrow.spring.starter.resolver.LoginTokenArgumentResolvers;
+import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -17,11 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -29,7 +27,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
     @Inject
-    private LoginTokenFilter loginTokenFilter;
+    private LoginUserFilter loginTokenFilter;
 
     @Inject
     private FlashFilter flashFilter;
@@ -50,7 +48,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private ClientInfoArgumentResolvers clientInfoArgumentResolvers;
 
     @Inject
-    private LoginTokenArgumentResolvers loginTokenArgumentResolvers;
+    private LoginUserArgumentResolvers loginTokenArgumentResolvers;
 
     @Inject
     private ParameterInterceptor parameterInterceptor;

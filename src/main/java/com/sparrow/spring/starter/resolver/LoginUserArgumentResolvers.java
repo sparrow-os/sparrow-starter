@@ -1,6 +1,6 @@
 package com.sparrow.spring.starter.resolver;
 
-import com.sparrow.protocol.LoginToken;
+import com.sparrow.protocol.LoginUser;
 import com.sparrow.protocol.ThreadContext;
 import javax.inject.Named;
 import org.slf4j.Logger;
@@ -12,11 +12,11 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Named
-public class LoginTokenArgumentResolvers implements HandlerMethodArgumentResolver {
-    private static Logger logger = LoggerFactory.getLogger(LoginTokenArgumentResolvers.class);
+public class LoginUserArgumentResolvers implements HandlerMethodArgumentResolver {
+    private static Logger logger = LoggerFactory.getLogger(LoginUserArgumentResolvers.class);
 
     @Override public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameter().getParameterizedType().equals(LoginToken.class);
+        return parameter.getParameter().getParameterizedType().equals(LoginUser.class);
     }
 
     @Override public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer

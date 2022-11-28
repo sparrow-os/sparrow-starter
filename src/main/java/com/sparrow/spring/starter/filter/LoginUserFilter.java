@@ -2,7 +2,7 @@ package com.sparrow.spring.starter.filter;
 
 import com.sparrow.core.spi.JsonFactory;
 import com.sparrow.json.Json;
-import com.sparrow.protocol.LoginToken;
+import com.sparrow.protocol.LoginUser;
 import com.sparrow.protocol.ThreadContext;
 import com.sparrow.protocol.constant.Constant;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 @Named
-public class LoginTokenFilter implements Filter {
+public class LoginUserFilter implements Filter {
     private Json json = JsonFactory.getProvider();
 
     @Override
@@ -24,8 +24,8 @@ public class LoginTokenFilter implements Filter {
         if (servletRequest instanceof HttpServletRequest) {
             HttpServletRequest req = (HttpServletRequest) servletRequest;
             String loginTokenOfHeader = req.getHeader(Constant.REQUEST_HEADER_KEY_LOGIN_TOKEN);
-            LoginToken loginToken = this.json.parse(loginTokenOfHeader, LoginToken.class);
-            ThreadContext.bindLoginToken(loginToken);
+            LoginUser loginUser = this.json.parse(loginTokenOfHeader, LoginUser.class);
+            ThreadContext.bindLoginToken(loginUser);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
