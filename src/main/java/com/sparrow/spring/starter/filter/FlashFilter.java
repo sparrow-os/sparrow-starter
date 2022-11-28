@@ -18,7 +18,7 @@ public class FlashFilter extends OncePerRequestFilter {
     private ServletUtility servletUtility = ServletUtility.getInstance();
 
     /**
-     * flash key -->/template/action-url.jsp  final url
+     * flash key -->/template/action-url.jsp
      * <p>
      * direct mode action url-->action-url
      * <p>
@@ -26,7 +26,7 @@ public class FlashFilter extends OncePerRequestFilter {
      * transit mode transit url--> transit-url?action_url
      */
     private boolean matchUrl(String flashKey, String actionKey, HttpServletRequest request) {
-        //redirect final jsp url
+        //redirect actual url
         if (StringUtility.matchUrl(flashKey, actionKey)) {
             return true;
         }
@@ -35,7 +35,7 @@ public class FlashFilter extends OncePerRequestFilter {
         if (StringUtility.matchUrl(flashKey, actualUrl)) {
             return true;
         }
-        //transit final jsp url
+        //transit url
         actionKey = request.getQueryString();
         if (actionKey == null) {
             return false;
@@ -44,7 +44,7 @@ public class FlashFilter extends OncePerRequestFilter {
             return true;
         }
 
-        //transit action url
+        //transit actual url
         String actualTransitUrl = servletUtility.assembleActualUrl(actionKey);
         if (StringUtility.matchUrl(flashKey, actualTransitUrl)) {
             return true;
