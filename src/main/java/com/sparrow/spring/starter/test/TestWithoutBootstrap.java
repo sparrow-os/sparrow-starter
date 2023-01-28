@@ -29,7 +29,7 @@ public @interface TestWithoutBootstrap {
      * @RunWith(SpringRunner.class) 是@RunWith(SpringJUnit4ClassRunner.class)
      * 的子类
      *
-     * 工具类中使用单元测试使用 TestWithoutBootstrap 类，不需要使用
+     * 工具类中单元测试使用 TestWithoutBootstrap 类，不需要使用
      * @SpringBootTest(classes = {Application.class})
      * 但需要配置
      *

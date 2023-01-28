@@ -26,11 +26,11 @@ public class FlashFilter extends OncePerRequestFilter {
      * transit mode transit url--> transit-url?action_url
      */
     private boolean matchUrl(String flashKey, String actionKey, HttpServletRequest request) {
-        //redirect actual url
+        //redirect url
         if (StringUtility.matchUrl(flashKey, actionKey)) {
             return true;
         }
-        //redirect action url
+        //redirect actual url
         String actualUrl = servletUtility.assembleActualUrl(actionKey);
         if (StringUtility.matchUrl(flashKey, actualUrl)) {
             return true;

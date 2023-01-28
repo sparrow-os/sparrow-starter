@@ -1,5 +1,6 @@
 package com.sparrow.spring.starter;
 
+import com.sparrow.constant.Config;
 import com.sparrow.core.Pair;
 import com.sparrow.protocol.POJO;
 import com.sparrow.protocol.Result;
@@ -7,6 +8,7 @@ import com.sparrow.protocol.constant.Constant;
 import com.sparrow.servlet.ServletContainer;
 import com.sparrow.support.web.HttpContext;
 import com.sparrow.support.web.ServletUtility;
+import com.sparrow.utility.ConfigUtility;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,8 @@ public class ModelAndViewUtils {
     public static ModelAndView redirect(String url) {
         ServletContainer servletContainer = SpringContext.getContext().getBean(ServletContainer.class);
         successFlash(servletContainer.getRequest(), url);
-        return new ModelAndView("redirect:/transit?" + url);
+        String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
+        return new ModelAndView("redirect:" + rootPath + "/transit?" + url);
     }
 
     public static Object flash(String key) {

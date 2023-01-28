@@ -23,28 +23,36 @@ public class GlobalExceptionHandler {
     @Inject
     private ServletContainer servletContainer;
 
+    private boolean isAjax(HttpServletRequest request) {
+        String ajax = request.getHeader(Constant.IS_AJAX);
+        if (ajax == null) {
+            return false;
+        }
+        return ajax.equalsIgnoreCase("true");
+    }
+
     @ResponseBody
     @ExceptionHandler(value = BusinessException.class)
     public Object handle(HttpServletRequest request, BusinessException e, RedirectAttributes attr) {
-        String contentType = request.getContentType();
-        if (contentType == null || Constant.CONTENT_TYPE_FORM.equals(contentType)) {
-            String referer = servletContainer.referer();
-            ModelAndViewUtils.failFlash(request, ResultAssembler.assemble(e, ConfigUtility.getValue(Config.LANGUAGE)));
-            return new ModelAndView("redirect:/error?" + referer);
+        if (this.isAjax(request)) {
+            return Result.fail(e);
         }
-        return Result.fail(e);
+        String referer = servletContainer.referer();
+        String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
+        ModelAndViewUtils.failFlash(request, ResultAssembler.assemble(e, ConfigUtility.getValue(Config.LANGUAGE)));
+        return new ModelAndView("redirect:" + rootPath + "/error?" + referer);
     }
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public Object exceptionHandler(HttpServletRequest request, Exception exception) {
         logger.error("global exception ", exception);
-        String contentType = request.getContentType();
-        if (contentType == null || Constant.CONTENT_TYPE_FORM.equals(contentType)) {
-            String referer = servletContainer.referer();
-            ModelAndViewUtils.failFlash(request, Result.fail());
-            return new ModelAndView("redirect:/error?" + referer);
+        if (this.isAjax(request)) {
+            return Result.fail();
         }
-        return Result.fail();
+        String referer = servletContainer.referer();
+        ModelAndViewUtils.failFlash(request, Result.fail());
+        String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
+        return new ModelAndView("redirect:" + rootPath + "/error?" + referer);
     }
 }
