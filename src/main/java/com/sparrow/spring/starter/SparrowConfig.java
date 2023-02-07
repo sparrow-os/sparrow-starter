@@ -26,6 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/sparrow_default.properties")
 @ConditionalOnResource(resources = "classpath:/sparrow_default.properties")
 public class SparrowConfig {
+    private String ds = "default";
 
     private String driverClassName;
 
@@ -75,5 +76,13 @@ public class SparrowConfig {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDs() {
+        return ds;
+    }
+
+    public void setDs(String ds) {
+        this.ds = ds;
     }
 }

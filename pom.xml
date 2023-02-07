@@ -47,21 +47,10 @@
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid.version}</version>
-            <optional>true</optional>
-            <!--依赖方可选 不加<optional> 如果上层依赖不需要数据库
-            需要手动exclude 排除
-            1. 在依赖starer 排除
-            2. spring boot application 排除-->
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>${druid.version}</version>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
