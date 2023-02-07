@@ -1,7 +1,6 @@
 # Sparrow与spring boot 相关通用配置
 
 ## 关于数据源
-
 ```
      <dependency>
           <groupId>com.alibaba</groupId>
