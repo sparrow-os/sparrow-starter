@@ -17,9 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -107,12 +109,17 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     }
 
     /**
-     * 配置静态访问资源
+     * 兼容swagger 配置
+     *
+     * @param registry
      */
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-//    }
+    @Override public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        //配置静态访问资源
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
 
     @Override public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.clientInfoArgumentResolvers);

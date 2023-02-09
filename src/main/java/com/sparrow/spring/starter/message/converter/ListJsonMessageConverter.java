@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.inject.Named;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 
 @Named
 public class ListJsonMessageConverter extends AbstractHttpMessageConverter<List<?>> {
+
     private Json json = JsonFactory.getProvider();
 
     public ListJsonMessageConverter() {
@@ -38,7 +40,11 @@ public class ListJsonMessageConverter extends AbstractHttpMessageConverter<List<
     @Override
     public void writeInternal(List<?> voList,
         HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        Result<List<?>> result = new Result<>(voList);
-        outputMessage.getBody().write(this.json.toString(result).getBytes());
+        if (ViewObjectUtils.isViewObjectList(voList)) {
+            Result<List<?>> result = new Result<>(voList);
+            outputMessage.getBody().write(this.json.toString(result).getBytes());
+            return;
+        }
+        outputMessage.getBody().write(this.json.toString(voList).getBytes());
     }
 }

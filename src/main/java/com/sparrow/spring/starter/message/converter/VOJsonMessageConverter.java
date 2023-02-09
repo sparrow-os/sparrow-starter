@@ -24,7 +24,7 @@ public class VOJsonMessageConverter extends AbstractHttpMessageConverter<VO> {
 
     @Override
     public boolean supports(Class clazz) {
-        return VO.class.isAssignableFrom(clazz);
+        return ViewObjectUtils.isViewObject(clazz);
     }
 
     @Override
