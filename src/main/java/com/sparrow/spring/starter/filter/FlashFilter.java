@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Named
 public class FlashFilter extends OncePerRequestFilter {
-    private ServletUtility servletUtility = ServletUtility.getInstance();
+    private static ServletUtility servletUtility = ServletUtility.getInstance();
 
     /**
      * flash key -->/template/action-url.jsp

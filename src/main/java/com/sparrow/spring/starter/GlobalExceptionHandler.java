@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
     private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @Inject

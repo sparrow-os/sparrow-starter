@@ -10,12 +10,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Deprecated
 public class ParameterInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-        Object handler) throws Exception {
+        Object handler) {
         long startTime = System.currentTimeMillis();
         request.setAttribute("startTime", startTime);
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
         }
-        return false;
+        return true;
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class DefaultController {
     /**
-     * SpringMVC映射的 / 与 /* 与 /** 的区别
+     * https://sparrowzoo.feishu.cn/docx/X6gKdokhYoYXMjxf4wxc1dtJnBf * 与 /** 的区别
      * <p>
      * /* 是所有文件夹，不含子文件夹
      * <p>
@@ -17,9 +17,8 @@ public class DefaultController {
      *
      * <pre>
      *     Spring MVC设定的Url Mapping有几种情况：
-     *
-     * （1）application.properties配置的静态资源路径：spring.resources.static-locations=${user.home}/webroot/
-     *
+     *     WebMvcPropertySourcedRequestMappingHandlerMapping 最高优先级
+     * （1）application.properties配置的静态资源路径：spring.mvc.static-locations=${user.home}/webroot/
      * （2）Controller定义的路径：
      *    1.全路径：@GetMapping("/upload/test.html")
      *    2.正则路径：@GetMapping("/**.html")
