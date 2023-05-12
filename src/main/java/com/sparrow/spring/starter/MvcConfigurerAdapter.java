@@ -3,12 +3,11 @@ package com.sparrow.spring.starter;
 import com.sparrow.spring.starter.Interceptor.ParameterInterceptor;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
-import com.sparrow.spring.starter.filter.GlobalAttributeFilter;
-import com.sparrow.spring.starter.filter.LoginUserFilter;
 import com.sparrow.spring.starter.message.converter.ListJsonMessageConverter;
 import com.sparrow.spring.starter.message.converter.VOJsonMessageConverter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
 import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
+import com.sparrow.support.web.GlobalAttributeFilter;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -28,16 +27,10 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
     @Inject
-    private LoginUserFilter loginTokenFilter;
-
-    @Inject
     private FlashFilter flashFilter;
 
     @Inject
     private ClientInformationFilter clientInformationFilter;
-
-    @Inject
-    private GlobalAttributeFilter globalAttributeFilter;
 
     @Inject
     private VOJsonMessageConverter jsonMessageConverter;
@@ -55,6 +48,11 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private ParameterInterceptor parameterInterceptor;
 
     @Bean
+    public GlobalAttributeFilter globalAttributeFilter() {
+        return new GlobalAttributeFilter();
+    }
+
+    @Bean
     public FilterRegistrationBean<Filter> flashFilterBean() {
         FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
         globalAttributeFilterBean.setFilter(flashFilter);
@@ -68,7 +66,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean<Filter> globalAttributeFilterBean() {
         FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
-        globalAttributeFilterBean.setFilter(globalAttributeFilter);
+        globalAttributeFilterBean.setFilter(globalAttributeFilter());
         globalAttributeFilterBean.addUrlPatterns("/*");
         globalAttributeFilterBean.setName("globalAttributeFilter");
         globalAttributeFilterBean.setOrder(1);
@@ -82,29 +80,31 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
         filterRegistrationBean.setFilter(clientInformationFilter);
         filterRegistrationBean.addUrlPatterns("/*");
         filterRegistrationBean.setName("clientInformationFilter");
-        filterRegistrationBean.setOrder(1);
-        //多个filter的时候order的数值越小 则优先级越高
-        return filterRegistrationBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean<Filter> loginTokenFilterBean() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(loginTokenFilter);
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean.setName("loginTokenFilter");
         filterRegistrationBean.setOrder(0);
         //多个filter的时候order的数值越小 则优先级越高
         return filterRegistrationBean;
     }
 
+    /**
+     * <pre>
+     *     HttpMessageConvertersAutoConfiguration
+     *     @Bean
+     *     @ConditionalOnMissingBean
+     *     public HttpMessageConverters messageConverters(ObjectProvider<HttpMessageConverter<?>> converters) {
+     *         return new HttpMessageConverters((Collection)converters.orderedStream().collect(Collectors.toList()));
+     *     }
+     * </pre>
+     * 会自动配置 下文不需要
+     *
+     * @param converters
+     */
     @Override public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         /**
          * 只对输出结果对象提供转换
          * 基本数据类型直接返回Result,不支持封装转换f
          */
-        converters.add(this.jsonMessageConverter);
-        converters.add(this.listJsonMessageConverter);
+//        converters.add(this.jsonMessageConverter);
+//        converters.add(this.listJsonMessageConverter);
     }
 
     /**

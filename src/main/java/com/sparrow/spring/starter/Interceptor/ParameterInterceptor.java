@@ -15,6 +15,7 @@ public class ParameterInterceptor implements HandlerInterceptor {
         request.setAttribute("startTime", startTime);
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
+            
         }
         return true;
     }

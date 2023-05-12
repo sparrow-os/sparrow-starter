@@ -3,11 +3,15 @@ package com.sparrow.spring.starter;
 import com.sparrow.constant.Config;
 import com.sparrow.core.Pair;
 import com.sparrow.protocol.POJO;
+import com.sparrow.protocol.Param;
+import com.sparrow.protocol.Query;
 import com.sparrow.protocol.Result;
+import com.sparrow.protocol.VO;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.servlet.ServletContainer;
 import com.sparrow.support.web.HttpContext;
 import com.sparrow.support.web.ServletUtility;
+import com.sparrow.utility.ClassUtility;
 import com.sparrow.utility.ConfigUtility;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -16,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ModelAndViewUtils {
+    private static final String QUERY = "query";
+
     /**
      * 重定向
      * <p>
@@ -29,6 +35,26 @@ public class ModelAndViewUtils {
         successFlash(servletContainer.getRequest(), url);
         String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
         return new ModelAndView("redirect:" + rootPath + "/transit?" + url);
+    }
+
+    public static <T extends POJO> String extractedPojoKey(T o) {
+        if (o == null) {
+            return null;
+        }
+        if (o instanceof Query) {
+            return QUERY;
+        }
+        return ClassUtility.getEntityNameByClass(o.getClass());
+    }
+
+    /**
+     * flash param aspect 预先加载参数
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T extends Query> T query() {
+        return (T) flash(QUERY);
     }
 
     public static Object flash(String key) {
@@ -67,9 +93,6 @@ public class ModelAndViewUtils {
         Map<String, Object> map = HttpContext.getContext().getHolder();
         for (String key : map.keySet()) {
             result.put(key, map.get(key));
-        }
-        if (result.size() == 0) {
-            return;
         }
         String referer = servletUtility.referer(request);
         result.put("ref", referer);
