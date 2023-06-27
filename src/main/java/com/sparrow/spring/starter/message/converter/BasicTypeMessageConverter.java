@@ -13,7 +13,7 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
-@Named
+@Deprecated
 public class BasicTypeMessageConverter extends AbstractHttpMessageConverter<Object> {
     private Json json = JsonFactory.getProvider();
 

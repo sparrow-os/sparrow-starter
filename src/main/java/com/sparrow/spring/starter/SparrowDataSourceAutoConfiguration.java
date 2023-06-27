@@ -4,8 +4,10 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.DataSourceFactory;
 import com.sparrow.datasource.DataSourceFactoryImpl;
+
 import javax.inject.Inject;
 import javax.sql.DataSource;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -43,9 +45,9 @@ public class SparrowDataSourceAutoConfiguration {
     }
 
     @Bean(name = "sparrow_default")
-    @ConditionalOnProperty(prefix = "sparrow", name = "ds", havingValue = "druid")
     @ConditionalOnClass(DruidDataSource.class)
-    public DruidDataSource druidDataSource() {
+    @ConditionalOnProperty(prefix = "sparrow", name = "ds", havingValue = "druid")
+    public DataSource druidDataSource() {
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setUsername(this.sparrowConfig.getUsername());
         druidDataSource.setPassword(this.sparrowConfig.getPassword());

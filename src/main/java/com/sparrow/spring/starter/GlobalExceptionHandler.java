@@ -7,8 +7,10 @@ import com.sparrow.protocol.constant.Constant;
 import com.sparrow.servlet.ServletContainer;
 import com.sparrow.support.web.ResultAssembler;
 import com.sparrow.utility.ConfigUtility;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,6 +36,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = BusinessException.class)
     public Object handle(HttpServletRequest request, BusinessException e, RedirectAttributes attr) {
+        logger.error("global exception ", e);
         if (this.isAjax(request)) {
             return Result.fail(e);
         }

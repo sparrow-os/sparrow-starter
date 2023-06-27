@@ -26,6 +26,9 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/sparrow_default.properties")
 @ConditionalOnResource(resources = "classpath:/sparrow_default.properties")
 public class SparrowConfig {
+    SparrowConfig(){
+        System.out.println("SparrowConfig init");
+    }
     private String ds = "default";
 
     private String driverClassName;

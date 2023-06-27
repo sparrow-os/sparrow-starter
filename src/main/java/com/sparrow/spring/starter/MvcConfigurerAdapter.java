@@ -3,14 +3,9 @@ package com.sparrow.spring.starter;
 import com.sparrow.spring.starter.Interceptor.ParameterInterceptor;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
-import com.sparrow.spring.starter.message.converter.ListJsonMessageConverter;
-import com.sparrow.spring.starter.message.converter.VOJsonMessageConverter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
 import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
 import com.sparrow.support.web.GlobalAttributeFilter;
-import java.util.List;
-import javax.inject.Inject;
-import javax.servlet.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,6 +17,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.inject.Inject;
+import javax.servlet.Filter;
+import java.util.List;
+
 @Configuration
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
@@ -31,12 +30,6 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Inject
     private ClientInformationFilter clientInformationFilter;
-
-    @Inject
-    private VOJsonMessageConverter jsonMessageConverter;
-
-    @Inject
-    private ListJsonMessageConverter listJsonMessageConverter;
 
     @Inject
     private ClientInfoArgumentResolvers clientInfoArgumentResolvers;
@@ -98,10 +91,11 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
      *
      * @param converters
      */
-    @Override public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         /**
          * 只对输出结果对象提供转换
-         * 基本数据类型直接返回Result,不支持封装转换f
+         * 基本数据类型直接返回Result,不支持封装转换
          */
 //        converters.add(this.jsonMessageConverter);
 //        converters.add(this.listJsonMessageConverter);
@@ -112,21 +106,34 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
      *
      * @param registry
      */
-    @Override public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
-        /**
-         * 保证simple mapping handler 在RequestMappingHandlerMapping (Order=0) 之前
-         */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+//        registry.addResourceHandler("/webjars/**")
+//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+/**
+ * 默认的WebMvcAutoConfiguration 中已存在，不需要重复配置
+ * 但如果应用中配置了WebMvcConfigurationSupport 的子类实例，会将默认的覆盖，则需要手动添加
+ *
+ * if (!registry.hasMappingForPattern("/webjars/**")) {
+ * 				customizeResourceHandlerRegistration(registry.addResourceHandler("/webjars/**")
+ * 						.addResourceLocations("classpath:/META-INF/resources/webjars/")
+ * 						.setCachePeriod(getSeconds(cachePeriod)).setCacheControl(cacheControl));
+ *  }
+ */
+
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.setOrder(-1);
-        //registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 
-    @Override public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.clientInfoArgumentResolvers);
         argumentResolvers.add(this.loginTokenArgumentResolvers);
     }
 
-    @Override public void addInterceptors(InterceptorRegistry registry) {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(this.parameterInterceptor);
     }
 }
