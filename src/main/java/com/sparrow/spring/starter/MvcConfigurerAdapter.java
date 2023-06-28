@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.inject.Inject;
@@ -55,6 +57,13 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
         //多个filter的时候order的数值越小 则优先级越高
         return globalAttributeFilterBean;
     }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/index");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+
 
     @Bean
     public FilterRegistrationBean<Filter> globalAttributeFilterBean() {

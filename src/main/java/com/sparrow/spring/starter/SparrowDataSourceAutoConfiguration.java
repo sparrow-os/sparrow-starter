@@ -8,6 +8,7 @@ import com.sparrow.datasource.DataSourceFactoryImpl;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import com.sparrow.utility.StringUtility;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -51,6 +52,11 @@ public class SparrowDataSourceAutoConfiguration {
         DruidDataSource druidDataSource = new DruidDataSource();
         druidDataSource.setUsername(this.sparrowConfig.getUsername());
         druidDataSource.setPassword(this.sparrowConfig.getPassword());
+        String envPasswordKey = "mysql_sparrow_password";
+        String password = System.getenv(envPasswordKey);
+        if(!StringUtility.isNullOrEmpty(password)){
+            druidDataSource.setPassword(password);
+        }
         druidDataSource.setUrl(this.sparrowConfig.getUrl());
         druidDataSource.setDriverClassName(this.sparrowConfig.getDriverClassName());
         druidDataSource.setInitialSize(8);
