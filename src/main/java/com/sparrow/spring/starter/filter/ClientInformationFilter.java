@@ -11,6 +11,7 @@ import eu.bitwalker.useragentutils.BrowserType;
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
+
 import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -32,11 +34,13 @@ public class ClientInformationFilter implements Filter {
     @Inject
     private SpringServletContainer springServletContainer;
 
-    @Override public void doFilter(ServletRequest req, ServletResponse response,
-        FilterChain chain) throws IOException, ServletException {
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse response,
+                         FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         ClientInformation clientInformation = new com.sparrow.protocol.ClientInformation();
         clientInformation.setIp(springServletContainer.getClientIp());
+        logger.info("client ip {}", clientInformation.getIp());
         String appId = request.getHeader(ClientInfoConstant.APP_ID);
         if (!StringUtility.isNullOrEmpty(appId)) {
             clientInformation.setAppId(Integer.parseInt(appId));
