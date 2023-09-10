@@ -4,6 +4,7 @@ import com.sparrow.core.Pair;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.support.web.ServletUtility;
 import com.sparrow.utility.StringUtility;
+
 import java.io.IOException;
 import java.util.Map;
 import javax.inject.Named;
@@ -11,10 +12,14 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Named
-public class FlashFilter extends OncePerRequestFilter {
+public class FlashFilter extends OncePerRequestFilter implements OrderedFilter {
+
+    private int order = 0;
     private static ServletUtility servletUtility = ServletUtility.getInstance();
 
     /**
@@ -52,8 +57,9 @@ public class FlashFilter extends OncePerRequestFilter {
         return false;
     }
 
-    @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain chain) throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain chain) throws ServletException, IOException {
         String actionKey = servletUtility.getActionKey(request);
         Pair<String, Map<String, Object>> sessionPair = (Pair<String, Map<String, Object>>) request.getSession().getAttribute(Constant.FLASH_KEY);
         if (sessionPair == null) {
@@ -80,8 +86,19 @@ public class FlashFilter extends OncePerRequestFilter {
      * @throws ServletException
      * @see https://github.com/spring-projects/spring-boot/issues/7426
      */
-    @Override protected boolean shouldNotFilter(HttpServletRequest request) {
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String actionKey = servletUtility.getActionKey(request);
         return actionKey.endsWith("favicon.ico");
+    }
+
+
+    @Override
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

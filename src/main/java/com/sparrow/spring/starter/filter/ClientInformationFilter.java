@@ -6,33 +6,27 @@ import com.sparrow.protocol.constant.ClientInfoConstant;
 import com.sparrow.protocol.enums.Platform;
 import com.sparrow.spring.starter.SpringServletContainer;
 import com.sparrow.utility.StringUtility;
-import eu.bitwalker.useragentutils.Browser;
-import eu.bitwalker.useragentutils.BrowserType;
-import eu.bitwalker.useragentutils.DeviceType;
-import eu.bitwalker.useragentutils.OperatingSystem;
-import eu.bitwalker.useragentutils.UserAgent;
-
-import java.io.IOException;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
+import eu.bitwalker.useragentutils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 
-@Named
-public class ClientInformationFilter implements Filter {
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+public class ClientInformationFilter implements OrderedFilter {
+    public ClientInformationFilter(int order) {
+        this.order = order;
+    }
+
     private static Logger logger = LoggerFactory.getLogger(ClientInformationFilter.class);
-
     @Inject
     private SpringServletContainer springServletContainer;
+
+    private int order;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse response,
@@ -101,5 +95,15 @@ public class ClientInformationFilter implements Filter {
         }
         ThreadContext.bindClientInfo(clientInformation);
         chain.doFilter(request, response);
+        ThreadContext.clearClient();
+    }
+
+    @Override
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
