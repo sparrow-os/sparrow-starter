@@ -9,10 +9,7 @@ import org.roaringbitmap.longlong.Roaring64Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Monitor {
@@ -59,25 +56,33 @@ public class Monitor {
      */
     private final AtomicLong accessCount = new AtomicLong(0);
 
-    public LinkedHashMap<String, Long> getAccessCountPerIp() {
-        List<Map.Entry<String, AtomicLong>> ipAccessList = CollectionsUtility.sortMapByValue(this.accessCountPerIp, Order.DESC, (o1, o2) -> o1.get() > o2.get() ? 1 : -1);
-        LinkedHashMap<String, Long> topIpAccessCountMap = new LinkedHashMap<>();
+    public List<MonitorPair>  getAccessCountPerIp() {
+        List<Map.Entry<String, AtomicLong>> ipAccessList = CollectionsUtility.sortMapByValue(this.accessCountPerIp, Order.DESC, new Comparator<AtomicLong>() {
+            @Override
+            public int compare(AtomicLong o1, AtomicLong o2) {
+                if (o1.get() == o2.get()) {
+                    return 0;
+                }
+                return o1.get() > o2.get() ? 1 : -1;
+            }
+        });
+        List<MonitorPair>  topIpAccessCount = new ArrayList<>();
         for (Map.Entry<String, AtomicLong> entry : ipAccessList) {
-            topIpAccessCountMap.put(entry.getKey(), entry.getValue().get());
-            if (topIpAccessCountMap.size() > 100) {
+            topIpAccessCount.add(new MonitorPair(entry.getKey(), entry.getValue().get()));
+            if (topIpAccessCount.size() > 100) {
                 break;
             }
         }
-        return topIpAccessCountMap;
+        return topIpAccessCount;
     }
 
-    public LinkedHashMap<String, Long> getQps() {
+    public  List<MonitorPair> getQps() {
         int seconds = 5 * 60;
         //显示最近10分钟 600条
-        LinkedHashMap<String, Long> topQps = new LinkedHashMap<>(seconds);
+        List<MonitorPair> topQps = new ArrayList<>(seconds);
         for (Long key : this.qps.keySet()) {
-            String secondKey = DateTimeUtility.getFormatTime(key*1000, "HH:mm:ss");
-            topQps.put(secondKey, this.qps.get(key).get());
+            String secondKey = DateTimeUtility.getFormatTime(key * 1000, "HH:mm:ss");
+            topQps.add(new MonitorPair(secondKey, this.qps.get(key).get()));
             if (topQps.size() > seconds) {
                 break;
             }
@@ -85,11 +90,11 @@ public class Monitor {
         return topQps;
     }
 
-    public LinkedHashMap<String, Long> getAccessPerDay() {
-        LinkedHashMap<String, Long> accessPerDay = new LinkedHashMap<>();
+    public List<MonitorPair> getAccessPerDay() {
+        List<MonitorPair> accessPerDay = new ArrayList<>();
         for (Long dayOfMills : this.accessPerDay.keySet()) {
             String day = DateTimeUtility.getFormatTime(dayOfMills, DateTime.FORMAT_YYYY_MM_DD);
-            accessPerDay.put(day, this.accessPerDay.get(dayOfMills).get());
+            accessPerDay.add(new MonitorPair(day, this.accessPerDay.get(dayOfMills).get()));
         }
         return accessPerDay;
     }
@@ -107,7 +112,7 @@ public class Monitor {
         this.accessCount.incrementAndGet();
     }
 
-    private void incrementAccessCountByIp(String ip) {
+    public void incrementAccessCountByIp(String ip) {
         synchronized (this.accessCountPerIp) {
             CollectionsUtility.incrementByKey(this.accessCountPerIp, ip, IP_COUNT_LIMIT);
         }

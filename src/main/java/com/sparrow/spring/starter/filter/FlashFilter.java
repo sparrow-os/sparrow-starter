@@ -4,19 +4,16 @@ import com.sparrow.core.Pair;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.support.web.ServletUtility;
 import com.sparrow.utility.StringUtility;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.Map;
-import javax.inject.Named;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
 
-import org.springframework.boot.web.servlet.filter.OrderedFilter;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-@Named
 public class FlashFilter extends OncePerRequestFilter implements OrderedFilter {
 
     private int order = 0;

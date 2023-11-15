@@ -21,21 +21,17 @@ import com.sparrow.protocol.POJO;
 import com.sparrow.servlet.ServletContainer;
 import com.sparrow.spring.starter.ModelAndViewUtils;
 import com.sparrow.spring.starter.SpringContext;
-import java.lang.reflect.Method;
-import java.util.concurrent.atomic.AtomicLong;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
 
 @Aspect
-@Component
 public class FlashParamPrepareAspect {
-
-    private static final AtomicLong BASE_COUNT = new AtomicLong();
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RequestMapping)")
     public void flashParamPointCut() {

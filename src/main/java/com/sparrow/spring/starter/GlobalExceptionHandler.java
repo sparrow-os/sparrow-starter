@@ -5,7 +5,6 @@ import com.sparrow.protocol.BusinessException;
 import com.sparrow.protocol.Result;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.servlet.ServletContainer;
-import com.sparrow.support.web.ResultAssembler;
 import com.sparrow.utility.ConfigUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +36,11 @@ public class GlobalExceptionHandler {
     public Object handle(HttpServletRequest request, BusinessException e, RedirectAttributes attr) {
         logger.error("global exception ", e);
         if (this.isAjax(request)) {
-            Result result = Result.fail(e);
-            result = ResultAssembler.assemble(result, ConfigUtility.getValue(Config.LANGUAGE));
-            return result;
+            return Result.fail(e);
         }
         String referer = servletContainer.referer();
         String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
-        ModelAndViewUtils.failFlash(request, ResultAssembler.assemble(e, ConfigUtility.getValue(Config.LANGUAGE)));
+        ModelAndViewUtils.failFlash(request, Result.fail(e));
         return new ModelAndView("redirect:" + rootPath + "/error?" + referer);
     }
 
@@ -52,8 +49,6 @@ public class GlobalExceptionHandler {
     public Object exceptionHandler(HttpServletRequest request, Exception exception) {
         logger.error("global exception ", exception);
         Result result = Result.fail();
-        result = ResultAssembler.assemble(result, ConfigUtility.getValue(Config.LANGUAGE));
-
         if (this.isAjax(request)) {
             return result;
         }

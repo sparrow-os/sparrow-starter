@@ -1,13 +1,11 @@
 package com.sparrow.spring.starter;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+import javax.servlet.http.HttpServletRequest;
+
 public class DefaultController {
     /**
      * |||* 与 /** 的区别
@@ -55,13 +53,13 @@ public class DefaultController {
      * 冲突，解决办法
      * 1. 重写url
      * 2. server.error.path 修改默认配置/
+     *
      * @return
      */
 //    @GetMapping("/error")
 //    public ModelAndView error() {
 //        return new ModelAndView("/error");
 //    }
-
     @GetMapping("favicon.ico")
     @ResponseBody
     void returnNoFavicon() {

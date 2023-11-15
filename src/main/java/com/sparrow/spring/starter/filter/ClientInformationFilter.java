@@ -11,19 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.filter.OrderedFilter;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class ClientInformationFilter implements OrderedFilter {
-    public ClientInformationFilter(int order) {
+    private static Logger logger = LoggerFactory.getLogger(ClientInformationFilter.class);
+
+    public ClientInformationFilter(int order, SpringServletContainer springServletContainer) {
+        this.springServletContainer = springServletContainer;
         this.order = order;
     }
 
-    private static Logger logger = LoggerFactory.getLogger(ClientInformationFilter.class);
-    @Inject
     private SpringServletContainer springServletContainer;
 
     private int order;

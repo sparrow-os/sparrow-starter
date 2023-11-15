@@ -4,22 +4,22 @@ import com.sparrow.spring.starter.SpringServletContainer;
 import com.sparrow.spring.starter.monitor.Monitor;
 import org.springframework.boot.web.servlet.filter.OrderedFilter;
 
-import javax.inject.Inject;
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 
 public class AccessMonitorFilter implements OrderedFilter {
     private static final String FAV_ICON = "/favicon.ico";
     private Monitor monitor;
     private Integer order;
-
-    @Inject
     private SpringServletContainer springServletContainer;
 
 
-    public AccessMonitorFilter(Monitor monitor, Integer order) {
+    public AccessMonitorFilter(Monitor monitor, Integer order,SpringServletContainer springServletContainer) {
+        this.springServletContainer=springServletContainer;
         this.monitor = monitor;
         this.order = order;
     }

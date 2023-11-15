@@ -2,23 +2,25 @@ package com.sparrow.spring.starter.monitor;
 
 import com.sparrow.protocol.POJO;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MonitorResult implements POJO {
-    private LinkedHashMap<String, Long> accessCountPerIp;
+    /**
+     * 用linked hash map 会有顺序问题
+     */
+    private List<MonitorPair> accessCountPerIp;
 
     /**
      * key:毫秒时间戮
      * value：请求数
      */
-    private LinkedHashMap<String, Long> qps;
+    private List<MonitorPair> qps;
 
     /**
      * 每天的请求数，近一周
      */
-    private LinkedHashMap<String, Long> accessCountPerDay;
+    private List<MonitorPair> accessCountPerDay;
 
     /**
      * 总的IP数
@@ -35,29 +37,29 @@ public class MonitorResult implements POJO {
      * key:用户id
      * value：channel info
      */
-    private Map<String, String> onlineUserMap = new HashMap<>();
+    private Map<String, String> onlineUserMap;
 
-    public LinkedHashMap<String, Long> getAccessCountPerIp() {
+    public List<MonitorPair> getAccessCountPerIp() {
         return accessCountPerIp;
     }
 
-    public void setAccessCountPerIp(LinkedHashMap<String, Long> accessCountPerIp) {
+    public void setAccessCountPerIp(List<MonitorPair> accessCountPerIp) {
         this.accessCountPerIp = accessCountPerIp;
     }
 
-    public LinkedHashMap<String, Long> getQps() {
+    public List<MonitorPair> getQps() {
         return qps;
     }
 
-    public void setQps(LinkedHashMap<String, Long> qps) {
+    public void setQps(List<MonitorPair> qps) {
         this.qps = qps;
     }
 
-    public LinkedHashMap<String, Long> getAccessCountPerDay() {
+    public List<MonitorPair> getAccessCountPerDay() {
         return accessCountPerDay;
     }
 
-    public void setAccessCountPerDay(LinkedHashMap<String, Long> accessCountPerDay) {
+    public void setAccessCountPerDay(List<MonitorPair> accessCountPerDay) {
         this.accessCountPerDay = accessCountPerDay;
     }
 

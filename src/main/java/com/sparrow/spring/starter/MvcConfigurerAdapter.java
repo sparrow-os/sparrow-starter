@@ -1,25 +1,23 @@
 package com.sparrow.spring.starter;
 
-import com.sparrow.spring.starter.Interceptor.ParameterInterceptor;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
 import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
 import com.sparrow.support.web.GlobalAttributeFilter;
+import com.sparrow.utility.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import java.util.List;
 
@@ -27,20 +25,33 @@ import java.util.List;
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
-    @Inject
-    private FlashFilter flashFilter;
+    @Value("${sparrow.allowed_origins}")
+    private String allowedOrigins;
 
-    @Inject
-    private ClientInformationFilter clientInformationFilter;
+    @Bean
+    public FlashFilter flashFilter() {
+        return new FlashFilter();
+    }
 
-    @Inject
-    private ClientInfoArgumentResolvers clientInfoArgumentResolvers;
+    @Bean
+    public SpringServletContainer springServletContainer() {
+        return new SpringServletContainer();
+    }
 
-    @Inject
-    private LoginUserArgumentResolvers loginTokenArgumentResolvers;
+    @Bean
+    public ClientInformationFilter clientInformationFilter() {
+        return new ClientInformationFilter(-98, springServletContainer());
+    }
 
-    @Inject
-    private ParameterInterceptor parameterInterceptor;
+    @Bean
+    public ClientInfoArgumentResolvers clientInfoArgumentResolvers() {
+        return new ClientInfoArgumentResolvers();
+    }
+
+    @Bean
+    public LoginUserArgumentResolvers loginTokenArgumentResolvers() {
+        return new LoginUserArgumentResolvers();
+    }
 
     @Bean
     public GlobalAttributeFilter globalAttributeFilter() {
@@ -50,7 +61,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean<Filter> flashFilterBean() {
         FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
-        globalAttributeFilterBean.setFilter(flashFilter);
+        globalAttributeFilterBean.setFilter(flashFilter());
         globalAttributeFilterBean.addUrlPatterns("/*");
         globalAttributeFilterBean.setName("flashFilter");
         globalAttributeFilterBean.setOrder(1);
@@ -79,7 +90,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean<Filter> clientInformationFilterBean() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(clientInformationFilter);
+        filterRegistrationBean.setFilter(clientInformationFilter());
         filterRegistrationBean.addUrlPatterns("/*");
         filterRegistrationBean.setName("clientInformationFilter");
         filterRegistrationBean.setOrder(0);
@@ -137,12 +148,24 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(this.clientInfoArgumentResolvers);
-        argumentResolvers.add(this.loginTokenArgumentResolvers);
+        argumentResolvers.add(this.clientInfoArgumentResolvers());
+        argumentResolvers.add(this.loginTokenArgumentResolvers());
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this.parameterInterceptor);
+    }
+
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        if (StringUtility.isNullOrEmpty(this.allowedOrigins)) {
+            this.allowedOrigins = "*";
+        }
+        registry.addMapping("/**")
+                .allowedOrigins(this.allowedOrigins)
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .maxAge(3600)
+                .allowCredentials(true);
     }
 }

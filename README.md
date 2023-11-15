@@ -52,3 +52,5 @@ Consider the following:
 @SpringBootApplication(scanBasePackages = "com.sparrow.*", exclude = {DataSourceAutoConfiguration.class,DruidDataSourceAutoConfigure.class})
 ```
 
+
+拦截器 controller 可以实现基类，由业务层继承复用

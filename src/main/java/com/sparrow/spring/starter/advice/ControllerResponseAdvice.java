@@ -13,8 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
  * 功能描述:AOP拦截所有Controller
- *
- * @After的时候统一帮你封装一下,返回Result
  */
 public class ControllerResponseAdvice implements ResponseBodyAdvice<Object> {
 

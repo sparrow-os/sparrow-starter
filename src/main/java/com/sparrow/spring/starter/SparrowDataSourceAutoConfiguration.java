@@ -1,26 +1,21 @@
 package com.sparrow.spring.starter;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.DataSourceFactory;
 import com.sparrow.datasource.DataSourceFactoryImpl;
-
-import javax.inject.Inject;
-import javax.sql.DataSource;
-
-import com.sparrow.utility.StringUtility;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.sql.DataSource;
+
 @Configuration
+@EnableConfigurationProperties(SparrowConfig.class)
 @ConditionalOnBean(SparrowConfig.class)
 public class SparrowDataSourceAutoConfiguration {
 
-    @Inject
-    private SparrowConfig sparrowConfig;
 
     /**
      * <pre>
@@ -45,25 +40,6 @@ public class SparrowDataSourceAutoConfiguration {
         return connectionPool;
     }
 
-    @Bean(name = "sparrow_default")
-    @ConditionalOnClass(DruidDataSource.class)
-    @ConditionalOnProperty(prefix = "sparrow", name = "ds", havingValue = "druid")
-    public DataSource druidDataSource() {
-        DruidDataSource druidDataSource = new DruidDataSource();
-        druidDataSource.setUsername(this.sparrowConfig.getUsername());
-        druidDataSource.setPassword(this.sparrowConfig.getPassword());
-        String envPasswordKey = "mysql_sparrow_password";
-        String password = System.getenv(envPasswordKey);
-        if(!StringUtility.isNullOrEmpty(password)){
-            druidDataSource.setPassword(password);
-        }
-        druidDataSource.setUrl(this.sparrowConfig.getUrl());
-        druidDataSource.setDriverClassName(this.sparrowConfig.getDriverClassName());
-        druidDataSource.setInitialSize(8);
-        druidDataSource.setMaxActive(8);
-        druidDataSource.setBreakAfterAcquireFailure(true);
-        return druidDataSource;
-    }
 
     @Bean
     public DataSourceFactoryImpl dataSourceFactory() {
