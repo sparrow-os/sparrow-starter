@@ -4,6 +4,8 @@ import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.DataSourceFactory;
 import com.sparrow.datasource.DataSourceFactoryImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +17,6 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(SparrowConfig.class)
 @ConditionalOnBean(SparrowConfig.class)
 public class SparrowDataSourceAutoConfiguration {
-
 
     /**
      * <pre>
@@ -33,7 +34,8 @@ public class SparrowDataSourceAutoConfiguration {
      * @return
      */
     @Bean(name = "sparrow_default")
-    @ConditionalOnProperty(prefix = "sparrow", name = "ds", havingValue = "sparrow")
+    @ConditionalOnClass(ConnectionPool.class)
+    @ConditionalOnMissingBean(ConnectionPool.class)
     public DataSource sparrow_default(DataSourceFactory dataSourceFactory) {
         ConnectionPool connectionPool = new ConnectionPool();
         connectionPool.setDataSourceFactory(dataSourceFactory);
@@ -42,6 +44,8 @@ public class SparrowDataSourceAutoConfiguration {
 
 
     @Bean
+    @ConditionalOnClass(DataSourceFactoryImpl.class)
+    @ConditionalOnMissingBean(DataSourceFactoryImpl.class)
     public DataSourceFactoryImpl dataSourceFactory() {
         return new DataSourceFactoryImpl("sparrow_default");
     }
