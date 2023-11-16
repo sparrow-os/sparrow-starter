@@ -133,6 +133,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 //        registry.addResourceHandler("/webjars/**")
 //                .addResourceLocations("classpath:/META-INF/resources/webjars/");
 /**
+ * 950518
  * 默认的WebMvcAutoConfiguration 中已存在，不需要重复配置
  * 但如果应用中配置了WebMvcConfigurationSupport 的子类实例，会将默认的覆盖，则需要手动添加
  *
