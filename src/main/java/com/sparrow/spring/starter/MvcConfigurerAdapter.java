@@ -9,14 +9,17 @@ import com.sparrow.utility.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 import java.util.List;
@@ -34,6 +37,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnMissingBean(SpringServletContainer.class)
     public SpringServletContainer springServletContainer() {
         return new SpringServletContainer();
     }
@@ -67,12 +71,6 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
         globalAttributeFilterBean.setOrder(1);
         //多个filter的时候order的数值越小 则优先级越高
         return globalAttributeFilterBean;
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 
 
@@ -121,31 +119,37 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 //        converters.add(this.listJsonMessageConverter);
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/index");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
     /**
      * 兼容swagger 配置
-     *
+     *如果应用中使用 WebMvcConfigurationSupport子类，则需要手动设置
+     * https://sparrowzoo.feishu.cn/docx/WS02dE7vToxILJx2Kmec7DgNndc
      * @param registry
      */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+    //   @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
 //        registry.addResourceHandler("/webjars/**")
 //                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-/**
- * 默认的WebMvcAutoConfiguration 中已存在，不需要重复配置
- * 但如果应用中配置了WebMvcConfigurationSupport 的子类实例，会将默认的覆盖，则需要手动添加
- *
- * if (!registry.hasMappingForPattern("/webjars/**")) {
- * 				customizeResourceHandlerRegistration(registry.addResourceHandler("/webjars/**")
- * 						.addResourceLocations("classpath:/META-INF/resources/webjars/")
- * 						.setCachePeriod(getSeconds(cachePeriod)).setCacheControl(cacheControl));
- *  }
- */
 
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-        registry.setOrder(-1);
-    }
+    /**
+     * 默认的WebMvcAutoConfiguration 中已存在，不需要重复配置
+     * 但如果应用中配置了WebMvcConfigurationSupport 的子类实例，会将默认的覆盖，则需要手动添加
+     * <p>
+     * if (!registry.hasMappingForPattern("/webjars/**")) {
+     * customizeResourceHandlerRegistration(registry.addResourceHandler("/webjars/**")
+     * .addResourceLocations("classpath:/META-INF/resources/webjars/")
+     * .setCachePeriod(getSeconds(cachePeriod)).setCacheControl(cacheControl));
+     * }
+     */
 
+//        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+//        registry.setOrder(-1);
+//    }
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.clientInfoArgumentResolvers());

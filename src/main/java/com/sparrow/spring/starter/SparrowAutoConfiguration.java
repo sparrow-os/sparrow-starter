@@ -2,6 +2,7 @@ package com.sparrow.spring.starter;
 
 import com.sparrow.spring.starter.Interceptor.FlashParamPrepareAspect;
 import com.sparrow.support.web.CookieUtility;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +25,7 @@ public class SparrowAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(SpringServletContainer.class)
     public SpringServletContainer springServletContainer() {
         return new SpringServletContainer();
     }
