@@ -1,13 +1,11 @@
 package com.sparrow.spring.starter;
 
 import com.sparrow.servlet.impl.AbstractServletContainer;
-
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class SpringServletContainer extends AbstractServletContainer {
     @Override
