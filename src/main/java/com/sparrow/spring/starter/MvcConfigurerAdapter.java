@@ -125,10 +125,10 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
      *
      * @param registry
      */
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    //必须以/结尾 垃圾。。。。
-    // registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+//@Override
+//public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//必须以/结尾 垃圾。。。。
+// registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
 //        registry.addResourceHandler("/webjars/**")
 //                .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
@@ -146,7 +146,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     // registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     //前置,会和默认的WebMvcAutoConfiguration 配置叠加，导致所有动态请求异常s
     //registry.setOrder(-1);
-//    }
+    //}
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.clientInfoArgumentResolvers());
