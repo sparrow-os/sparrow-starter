@@ -1,11 +1,7 @@
 package com.sparrow.spring.starter.redis;
 
-import com.sparrow.exception.Asserts;
-import com.sparrow.protocol.BusinessException;
-import com.sparrow.protocol.constant.SparrowError;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
 
 public class OperateLimiter {
