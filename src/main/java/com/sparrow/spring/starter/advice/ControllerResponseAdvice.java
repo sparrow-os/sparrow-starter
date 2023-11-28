@@ -19,8 +19,11 @@ public class ControllerResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         // response是Result类型，或者注释了NotControllerResponseAdvice都不进行包装
+        //如果不是Result
         boolean isResult = methodParameter.getParameterType().isAssignableFrom(Result.class);
+        //并不是非前后端 分享的ModelAndView
         boolean isModelAndView = methodParameter.getParameterType().equals(ModelAndView.class);
+        //才会被封装
         return !isResult && !isModelAndView;
     }
 
