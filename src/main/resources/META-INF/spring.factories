@@ -1,4 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.sparrow.spring.starter.SparrowAutoConfiguration,\
-com.sparrow.spring.starter.SparrowAutoConfiguration
+com.sparrow.spring.starter.RedisAutoConfiguration,\
+com.sparrow.spring.starter.SparrowDataSourceAutoConfiguration
