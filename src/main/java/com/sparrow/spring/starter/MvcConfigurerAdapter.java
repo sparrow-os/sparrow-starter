@@ -13,7 +13,8 @@ import com.sparrow.utility.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -23,10 +24,12 @@ import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
-import javax.servlet.ServletRegistration;
 import java.util.List;
 
 @Configuration
@@ -182,14 +185,18 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     }
 
 
-    @Bean
     @ConditionalOnProperty(prefix = "sparrow", name = "captcha.service", havingValue = "redis")
-    public RedisCaptchaService redisCaptchaService(RedisTemplate redisTemplate) {
-        return new RedisCaptchaService(redisTemplate);
+    @ConditionalOnClass(RedisTemplate.class)
+    public static class RedisCaptchaServiceConfig {
+        @Bean
+        public RedisCaptchaService redisCaptchaService(RedisTemplate redisTemplate) {
+            return new RedisCaptchaService(redisTemplate);
+        }
     }
 
 
     @Bean
+    @ConditionalOnBean(CaptchaService.class)
     public ServletRegistrationBean captcha(CaptchaService captchaService) {
         return new ServletRegistrationBean<>(new CaptchaServlet(captchaService), "/captcha");
     }
