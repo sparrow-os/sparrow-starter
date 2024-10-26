@@ -4,14 +4,20 @@ import com.sparrow.image.ImageExtractorRegistry;
 import com.sparrow.io.FileService;
 import com.sparrow.io.impl.JDKFileService;
 import com.sparrow.spring.starter.Interceptor.FlashParamPrepareAspect;
+import com.sparrow.spring.starter.redis.OperateLimiter;
+import com.sparrow.spring.starter.redis.RedisOperateLimiter;
 import com.sparrow.support.IpSupport;
 import com.sparrow.support.ip.SparrowIpSupport;
 import com.sparrow.support.web.CookieUtility;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 @Configuration
+@AutoConfigureAfter(RedisAutoConfiguration.class)
 public class SparrowAutoConfiguration {
 
     @Bean
@@ -61,4 +67,5 @@ public class SparrowAutoConfiguration {
     public ImageExtractorRegistry imageExtractorRegistry() {
         return new ImageExtractorRegistry();
     }
+
 }

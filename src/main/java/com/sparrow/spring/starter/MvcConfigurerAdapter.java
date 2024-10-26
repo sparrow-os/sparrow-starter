@@ -4,18 +4,30 @@ import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
 import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
+import com.sparrow.spring.starter.servlet.CaptchaServlet;
+import com.sparrow.spring.starter.servlet.RedisCaptchaService;
+import com.sparrow.spring.starter.servlet.SessionCaptchaService;
+import com.sparrow.support.CaptchaService;
 import com.sparrow.support.web.GlobalAttributeFilter;
 import com.sparrow.utility.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 import java.util.List;
@@ -165,5 +177,28 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
         }
         this.allowedOrigins = "*";
         registry.addMapping("/**").allowedOrigins(this.allowedOrigins).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "sparrow", name = "captcha.service", havingValue = "session")
+    public SessionCaptchaService sessionCaptchaService() {
+        return new SessionCaptchaService(springServletContainer());
+    }
+
+
+    @ConditionalOnProperty(prefix = "sparrow", name = "captcha.service", havingValue = "redis")
+    @ConditionalOnClass(RedisTemplate.class)
+    public static class RedisCaptchaServiceConfig {
+        @Bean
+        public RedisCaptchaService redisCaptchaService(RedisTemplate redisTemplate) {
+            return new RedisCaptchaService(redisTemplate);
+        }
+    }
+
+
+    @Bean
+    @ConditionalOnBean(CaptchaService.class)
+    public ServletRegistrationBean captcha(CaptchaService captchaService) {
+        return new ServletRegistrationBean<>(new CaptchaServlet(captchaService), "/captcha");
     }
 }

@@ -5,12 +5,12 @@
     <parent>
         <artifactId>sparrow-bom</artifactId>
         <groupId>com.sparrowzoo</groupId>
-        <version>1.0.4-RELEASE</version>
+        <version>1.0.5-SNAPSHOT</version>
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sparrow-starter</artifactId>
-    <version>1.0.4-RELEASE</version>
+    <version>1.0.5-SNAPSHOT</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -63,6 +63,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
