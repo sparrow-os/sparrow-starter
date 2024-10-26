@@ -24,7 +24,7 @@ import java.util.List;
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
-    @Value("${sparrow.allowed_origins}")
+    @Value("${sparrow.allowed_origins:false}")
     private String allowedOrigins;
 
     @Bean
@@ -160,9 +160,10 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        if (StringUtility.isNullOrEmpty(this.allowedOrigins)) {
-            this.allowedOrigins = "*";
+        if (this.allowedOrigins.equals("false")) {
+            return;
         }
+        this.allowedOrigins = "*";
         registry.addMapping("/**").allowedOrigins(this.allowedOrigins).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
     }
 }
