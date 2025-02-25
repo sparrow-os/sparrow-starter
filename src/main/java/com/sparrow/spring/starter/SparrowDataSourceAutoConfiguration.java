@@ -4,6 +4,7 @@ import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.DataSourceFactory;
 import com.sparrow.datasource.DataSourceFactoryImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +12,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnBean(SparrowConfig.class)
+@ConditionalOnMissingBean(DataSource.class)
 public class SparrowDataSourceAutoConfiguration {
     /**
      * <pre>
