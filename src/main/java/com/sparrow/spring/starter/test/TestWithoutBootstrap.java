@@ -1,6 +1,5 @@
 package com.sparrow.spring.starter.test;
 
-import com.sparrow.spring.starter.SparrowConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.test.context.TestExecutionListeners;
@@ -15,7 +14,6 @@ import java.lang.annotation.*;
 @Inherited
 @SpringBootApplication(scanBasePackages = "com.sparrow.*")
 @TestPropertySource("classpath:application.properties")  //配置文件注入
-@EnableConfigurationProperties({SparrowConfig.class})
 @TestExecutionListeners(listeners = {SparrowTestExecutionListener.class, DependencyInjectionTestExecutionListener.class})
 public @interface TestWithoutBootstrap {
     /**

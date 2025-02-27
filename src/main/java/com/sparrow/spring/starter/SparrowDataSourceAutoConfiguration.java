@@ -1,9 +1,7 @@
 package com.sparrow.spring.starter;
 
-import com.sparrow.datasource.ConnectionPool;
-import com.sparrow.datasource.DataSourceFactory;
-import com.sparrow.datasource.DataSourceFactoryImpl;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import com.sparrow.datasource.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnBean(SparrowConfig.class)
-@ConditionalOnMissingBean(DataSource.class)
+@ConditionalOnClass(ConnectionContextHolder.class)
 public class SparrowDataSourceAutoConfiguration {
     /**
      * <pre>
@@ -31,6 +28,7 @@ public class SparrowDataSourceAutoConfiguration {
      * @return
      */
     @Bean(name = "sparrow_default")
+    @ConditionalOnMissingBean(DataSource.class)
     public DataSource sparrow_default(DataSourceFactory dataSourceFactory) {
         ConnectionPool connectionPool = new ConnectionPool();
         connectionPool.setDataSourceFactory(dataSourceFactory);
@@ -38,18 +36,18 @@ public class SparrowDataSourceAutoConfiguration {
     }
 
     /**
-     * 只配置一个数据源，此处为框架学习使用，生产环境的druid配置比较复杂，由业务自行配置
-     * sparrow.ds=sparrow 不再生效
+     * return new DataSourceFactoryImpl("sparrow_default,user_default");
+     * 业务可以自定义多个数据源
+      * @return
      */
-//    @Bean(name = "sparrow_default")
-//    @ConditionalOnProperty(prefix = "sparrow", name = "ds", havingValue = "druid")
-//    @ConditionalOnClass(DruidDataSource.class)
-//    public DruidDataSource druidDataSource() {
-//        DruidDataSource druidDataSource = new DruidDataSource();
-//        return druidDataSource;
-//    }
     @Bean
+    @ConditionalOnMissingBean(DataSourceFactoryImpl.class)
     public DataSourceFactoryImpl dataSourceFactory() {
         return new DataSourceFactoryImpl("sparrow_default");
+    }
+
+    @Bean
+    public ConnectionContextHolder connectionContextHolder() {
+        return new ConnectionContextHolderImpl(dataSourceFactory());
     }
 }

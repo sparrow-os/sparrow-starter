@@ -9,7 +9,6 @@ import com.sparrow.spring.starter.servlet.RedisCaptchaService;
 import com.sparrow.spring.starter.servlet.SessionCaptchaService;
 import com.sparrow.support.CaptchaService;
 import com.sparrow.support.web.GlobalAttributeFilter;
-import com.sparrow.utility.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
