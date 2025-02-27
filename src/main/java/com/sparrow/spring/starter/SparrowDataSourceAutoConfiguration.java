@@ -29,10 +29,8 @@ public class SparrowDataSourceAutoConfiguration {
      */
     @Bean(name = "sparrow_default")
     @ConditionalOnMissingBean(DataSource.class)
-    public DataSource sparrow_default(DataSourceFactory dataSourceFactory) {
-        ConnectionPool connectionPool = new ConnectionPool();
-        connectionPool.setDataSourceFactory(dataSourceFactory);
-        return connectionPool;
+    public DataSource sparrow_default() {
+        return new ConnectionPool();
     }
 
     /**
@@ -47,7 +45,7 @@ public class SparrowDataSourceAutoConfiguration {
     }
 
     @Bean
-    public ConnectionContextHolder connectionContextHolder() {
-        return new ConnectionContextHolderImpl(dataSourceFactory());
+    public ConnectionContextHolder connectionContextHolder(DataSourceFactoryImpl dataSourceFactory) {
+        return new ConnectionContextHolderImpl(dataSourceFactory);
     }
 }
