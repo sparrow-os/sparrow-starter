@@ -80,3 +80,6 @@ spring.factories 的优先级最低，最后加载
 注意:必须添加ConditionalOnMissingBean注解，否则无法被上层业务覆盖
 Spring Boot的自动配置是通过@EnableAutoConfiguration注解驱动的，默认是开启状态。你也可以通过spring.boot.enableautoconfiguration = false来关闭它，回退到Spring Framework时代。
 
+### @AutoConfigureBefore 控制优先级
+DruidDataSourceAutoConfiguration 强制在以下类之前先装配
+@AutoConfigureBefore({SparrowDataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})

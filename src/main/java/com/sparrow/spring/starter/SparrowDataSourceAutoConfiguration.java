@@ -1,6 +1,7 @@
 package com.sparrow.spring.starter;
 
 import com.sparrow.datasource.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -36,10 +37,12 @@ public class SparrowDataSourceAutoConfiguration {
     /**
      * return new DataSourceFactoryImpl("sparrow_default,user_default");
      * 业务可以自定义多个数据源
-      * @return
+     *
+     * @return
      */
     @Bean
     @ConditionalOnMissingBean(DataSourceFactoryImpl.class)
+    @ConditionalOnBean(DataSource.class)
     public DataSourceFactoryImpl dataSourceFactory() {
         return new DataSourceFactoryImpl("sparrow_default");
     }
