@@ -1,7 +1,6 @@
 package com.sparrow.spring.starter;
 
 import com.sparrow.datasource.*;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +9,14 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnClass(ConnectionContextHolder.class)
+@ConditionalOnClass(ConnectionPool.class)
 public class SparrowDataSourceAutoConfiguration {
+    @Bean
+    public ConnectionProxyContainer connectionProxyContainer() {
+        return new ConnectionProxyContainer();
+    }
+
+
     /**
      * <pre>
      *     private String[] getNames(Map<String, Object> annotationAttributes) {
@@ -30,25 +35,9 @@ public class SparrowDataSourceAutoConfiguration {
      */
     @Bean(name = "sparrow_default")
     @ConditionalOnMissingBean(DataSource.class)
-    public DataSource sparrow_default() {
-        return new ConnectionPool();
-    }
-
-    /**
-     * return new DataSourceFactoryImpl("sparrow_default,user_default");
-     * 业务可以自定义多个数据源
-     *
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean(DataSourceFactoryImpl.class)
-    @ConditionalOnBean(DataSource.class)
-    public DataSourceFactoryImpl dataSourceFactory() {
-        return new DataSourceFactoryImpl("sparrow_default");
-    }
-
-    @Bean
-    public ConnectionContextHolder connectionContextHolder(DataSourceFactoryImpl dataSourceFactory) {
-        return new ConnectionContextHolderImpl(dataSourceFactory);
+    public ConnectionPool sparrow_default(ConnectionProxyContainer connectionProxyContainer) {
+        System.out.println("sparrow_default datasource init ....");
+        //兼容spring 注入方式
+        return new ConnectionPool("sparrow_default", connectionProxyContainer);
     }
 }

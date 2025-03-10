@@ -131,33 +131,6 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 //        converters.add(this.listJsonMessageConverter);
     }
 
-    /**
-     * 兼容swagger 配置
-     *
-     * @param registry
-     */
-//@Override
-//public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//必须以/结尾 垃圾。。。。
-// registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-
-    /**
-     * 默认的WebMvcAutoConfiguration 中已存在，不需要重复配置
-     * 但如果应用中配置了WebMvcConfigurationSupport 的子类实例，会将默认的覆盖，则需要手动添加
-     * <p>
-     * if (!registry.hasMappingForPattern("/webjars/**")) {
-     * customizeResourceHandlerRegistration(registry.addResourceHandler("/webjars/**")
-     * .addResourceLocations("classpath:/META-INF/resources/webjars/")
-     * .setCachePeriod(getSeconds(cachePeriod)).setCacheControl(cacheControl));
-     * }
-     */
-
-    // registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    //前置,会和默认的WebMvcAutoConfiguration 配置叠加，导致所有动态请求异常s
-    //registry.setOrder(-1);
-    //}
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.clientInfoArgumentResolvers());
