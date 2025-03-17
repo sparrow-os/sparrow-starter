@@ -1,5 +1,6 @@
 package com.sparrow.spring.starter.config;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties(prefix = "sparrow")
+@Data
 public class SparrowConfig {
 
     @Value("${profile:dev}")
@@ -38,46 +40,6 @@ public class SparrowConfig {
     @Value("${authenticator.exclude-patterns:}")
     private String excludePatterns;
 
-    @Value("${authenticator.mock_login_user}")
+    @Value("${authenticator.mock.login.user:false}")
     private Boolean mockUser;
-
-    public Boolean getSupportTemplate() {
-        return supportTemplate;
-    }
-
-    public String getApiPrefix() {
-        return apiPrefix;
-    }
-
-    public String getAllowedOrigins() {
-        return allowedOrigins;
-    }
-
-    public String getPasswordKey() {
-        return passwordKey;
-    }
-
-    public String getEncryptKey() {
-        return encryptKey;
-    }
-
-    public Boolean getValidateDeviceId() {
-        return validateDeviceId;
-    }
-
-    public Boolean getValidateStatus() {
-        return validateStatus;
-    }
-
-    public String getExcludePatterns() {
-        return excludePatterns;
-    }
-
-    public Boolean getMockUser() {
-        return mockUser;
-    }
-
-    public String getProfile() {
-        return profile;
-    }
 }
