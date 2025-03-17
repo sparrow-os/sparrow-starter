@@ -1,5 +1,6 @@
 package com.sparrow.spring.starter;
 
+import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
@@ -11,7 +12,10 @@ import com.sparrow.support.CaptchaService;
 import com.sparrow.support.web.GlobalAttributeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -32,11 +37,12 @@ import javax.servlet.Filter;
 import java.util.List;
 
 @Configuration
+@AutoConfigureAfter(SparrowConfig.class)
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
-    @Value("${sparrow.allowed_origins:false}")
-    private String allowedOrigins;
+    @Autowired
+    private SparrowConfig sparrowConfig;
 
     @Bean
     public FlashFilter flashFilter() {
@@ -144,11 +150,10 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        if (this.allowedOrigins.equals("false")) {
+        if (this.sparrowConfig.getAllowedOrigins().equals("false")) {
             return;
         }
-        this.allowedOrigins = "*";
-        registry.addMapping("/**").allowedOrigins(this.allowedOrigins).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
+        registry.addMapping("/**").allowedOrigins(this.sparrowConfig.getAllowedOrigins()).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
     }
 
     @Bean
