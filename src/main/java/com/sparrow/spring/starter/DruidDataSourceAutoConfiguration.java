@@ -6,7 +6,6 @@ import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.druid.datasource.DruidCustomPasswordCallback;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -27,7 +26,7 @@ public class DruidDataSourceAutoConfiguration {
 
     @Bean
     public DruidCustomPasswordCallback passwordCallback() {
-        return new DruidCustomPasswordCallback(this.sparrowConfig.getPasswordKey());
+        return new DruidCustomPasswordCallback(this.sparrowConfig.getAuthenticator().getDatasourcePasswordKey());
     }
 
     @Bean("sparrow_default")

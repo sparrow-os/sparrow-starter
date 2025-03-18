@@ -1,7 +1,7 @@
 package com.sparrow.spring.starter.config;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,37 +9,43 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "sparrow")
 @Data
+@ToString
+/**
+ * 学习文档
+ * https://sparrowzoo.feishu.cn/docx/HatsdGWMeoi036x28vQcsKeNnOb
+ */
 public class SparrowConfig {
+    private String profile = "dev";
+    private String allowedOrigins = "*";
+    private Exception exception;
+    private Authenticator authenticator;
 
-    @Value("${profile:dev}")
-    private String profile;
-    /**
-     * 默认不支持模板引擎
-     */
-    @Value("${exception.template.support:false}")
-    private Boolean supportTemplate;
 
-    @Value("${exception.api.prefix:}")
-    private String apiPrefix;
+    @Data
+    @ToString
+    public static class Exception {
+        /**
+         * 默认不支持模板引擎
+         */
+        private Boolean supportTemplate = false;
 
-    @Value("${allowed.origins:false}")
-    private String allowedOrigins;
+        private String apiPrefix;
 
-    @Value("${datasource.password.key:mysql_sparrow_password}")
-    private String passwordKey;
+    }
 
-    @Value("${authenticator.encrypt_key:}")
-    private String encryptKey;
+    @Data
+    @ToString
+    public static class Authenticator {
+        private String encryptKey;
 
-    @Value("${authenticator.validate_device_id:true}")
-    private Boolean validateDeviceId;
+        private Boolean validateDeviceId = true;
 
-    @Value("${authenticator.validate_status:true}")
-    private Boolean validateStatus;
+        private Boolean validateStatus = true;
 
-    @Value("${authenticator.exclude-patterns:}")
-    private String excludePatterns;
+        private String excludePatterns;
 
-    @Value("${authenticator.mock.login.user:false}")
-    private Boolean mockUser;
+        private Boolean mockLoginUser = false;
+
+        private String datasourcePasswordKey;
+    }
 }
