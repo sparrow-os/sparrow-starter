@@ -30,8 +30,8 @@ public class GlobalExceptionHandler {
 
 
     private boolean isAjax(HttpServletRequest request) {
-        SparrowConfig.Exception exception = this.sparrowConfig.getException();
-        return ServletUtility.getInstance().isAjax(request, exception.getSupportTemplate(), exception.getApiPrefix());
+        SparrowConfig.Mvc templateEngine = this.sparrowConfig.getMvc();
+        return ServletUtility.getInstance().isAjax(request, templateEngine.getSupportTemplateEngine(), templateEngine.getAjaxPattens());
     }
 
     @ResponseBody

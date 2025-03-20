@@ -1,6 +1,5 @@
 # Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.sparrow.spring.starter.config.SparrowConfig,\
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.sparrow.spring.starter.config.SparrowConfig,\
 com.sparrow.spring.starter.SparrowAutoConfiguration,\
 com.sparrow.spring.starter.RedisAutoConfiguration,\
 com.sparrow.spring.starter.SparrowDataSourceAutoConfiguration,\
@@ -8,7 +7,8 @@ com.sparrow.spring.starter.DruidDataSourceAutoConfiguration,\
 com.sparrow.spring.starter.config.orm.SparrowORMAutoConfiguration,\
 com.sparrow.spring.starter.config.orm.release.SparrowReleaserAutoConfiguration,\
 com.sparrow.spring.starter.config.orm.release.OtherReleaserAutoConfiguration,\
-com.sparrow.spring.starter.MvcConfigurerAdapter
+com.sparrow.spring.starter.MvcConfigurerAdapter,\
+com.sparrow.spring.starter.TemplateEngineAutoconfiguration
 
 
 

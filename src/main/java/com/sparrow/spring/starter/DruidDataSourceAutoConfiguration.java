@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 @AutoConfigureBefore({SparrowDataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @AutoConfigureAfter(SparrowConfig.class)
 public class DruidDataSourceAutoConfiguration {
+    
     @Autowired
     private SparrowConfig sparrowConfig;
 

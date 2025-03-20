@@ -1,7 +1,7 @@
 package com.sparrow.spring.starter.filter;
 
-import com.sparrow.spring.starter.SpringServletContainer;
 import com.sparrow.spring.starter.monitor.Monitor;
+import com.sparrow.support.web.ServletUtility;
 import org.springframework.boot.web.servlet.filter.OrderedFilter;
 
 import javax.servlet.FilterChain;
@@ -15,11 +15,8 @@ public class AccessMonitorFilter implements OrderedFilter {
     private static final String FAV_ICON = "/favicon.ico";
     private Monitor monitor;
     private Integer order;
-    private SpringServletContainer springServletContainer;
 
-
-    public AccessMonitorFilter(Monitor monitor, Integer order,SpringServletContainer springServletContainer) {
-        this.springServletContainer=springServletContainer;
+    public AccessMonitorFilter(Monitor monitor, Integer order) {
         this.monitor = monitor;
         this.order = order;
     }
@@ -33,7 +30,7 @@ public class AccessMonitorFilter implements OrderedFilter {
             chain.doFilter(request, response);
             return;
         }
-        String ip = this.springServletContainer.getClientIp();
+        String ip = ServletUtility.getInstance().getClientIp(request);
         this.monitor.access(ip);
         chain.doFilter(request, response);
     }

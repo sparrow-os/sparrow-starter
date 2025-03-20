@@ -41,8 +41,10 @@ public class DefaultController {
      * <p>
      * 此时再次访问访问 /upload/test.html如果1 / 2 / 3 中都有匹配时，则会使用（3）的规则
      * </pre >
+     * @see TemplateEngineAutoconfiguration
      */
     @GetMapping("/**")
+    @Deprecated
     public ModelAndView all(HttpServletRequest request) {
         return new ModelAndView(request.getServletPath());
     }
