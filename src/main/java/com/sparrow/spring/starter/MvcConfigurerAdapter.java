@@ -3,6 +3,7 @@ package com.sparrow.spring.starter;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
+import com.sparrow.spring.starter.filter.SparrowCorsFilter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
 import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
 import com.sparrow.spring.starter.servlet.CaptchaServlet;
@@ -27,11 +28,10 @@ import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import javax.servlet.Filter;
 import java.util.List;
@@ -52,6 +52,20 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     @Bean
     public SpringServletContainer springServletContainer() {
         return new SpringServletContainer();
+    }
+
+    @Bean
+    public SparrowCorsFilter sparrowCorsFilter() {
+        if (this.sparrowConfig.getAllowedOrigins().equals("false")) {
+            return null;
+        }
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin(this.sparrowConfig.getAllowedOrigins());
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        source.registerCorsConfiguration("/**", config);
+        return new SparrowCorsFilter(source, 0);
     }
 
     @Bean
@@ -147,13 +161,20 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
     }
 
-
+    /**
+     * spring 跨域拦截器配置，在filter 中返回的情况无法生效
+     * 如果在拦截器之前生效需要配置 CorsFilter
+     * @see SparrowCorsFilter
+     *
+     * @param registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         if (this.sparrowConfig.getAllowedOrigins().equals("false")) {
             return;
         }
-        registry.addMapping("/**").allowedOrigins(this.sparrowConfig.getAllowedOrigins()).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
+        registry.addMapping("/**")
+                .allowedOrigins(this.sparrowConfig.getAllowedOrigins()).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
     }
 
     @Bean
