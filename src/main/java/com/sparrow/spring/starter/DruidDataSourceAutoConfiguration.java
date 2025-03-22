@@ -27,7 +27,8 @@ public class DruidDataSourceAutoConfiguration {
 
     @Bean
     public DruidCustomPasswordCallback passwordCallback() {
-        return new DruidCustomPasswordCallback(this.sparrowConfig.getAuthenticator().getDatasourcePasswordKey());
+        return new DruidCustomPasswordCallback(this.sparrowConfig.getAuthenticator().getDatasourcePasswordKey(),
+                this.sparrowConfig.getAuthenticator().getDebugDatasourcePassword());
     }
 
     @Bean("sparrow_default")

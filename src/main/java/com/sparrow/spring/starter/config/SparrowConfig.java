@@ -48,6 +48,8 @@ public class SparrowConfig {
         private Boolean mockLoginUser = false;
 
         private String datasourcePasswordKey;
+
+        private Boolean debugDatasourcePassword = false;
     }
 
     @Data
