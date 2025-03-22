@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 @AutoConfigureBefore({SparrowDataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @AutoConfigureAfter(SparrowConfig.class)
 public class DruidDataSourceAutoConfiguration {
-    
+
     @Autowired
     private SparrowConfig sparrowConfig;
 
@@ -39,6 +39,8 @@ public class DruidDataSourceAutoConfiguration {
      * druid-spring-boot-starter 依赖自动生效 druid，可以不配置 type 属性，但建议配置
      */
     public DataSource sparrow_default() {
-        return new DruidDataSourceWrapper();
+        DruidDataSourceWrapper dataSource = new DruidDataSourceWrapper();
+        dataSource.setPasswordCallback(passwordCallback());
+        return dataSource;
     }
 }
