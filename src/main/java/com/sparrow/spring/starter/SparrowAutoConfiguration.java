@@ -7,7 +7,6 @@ import com.sparrow.spring.starter.Interceptor.FlashParamPrepareAspect;
 import com.sparrow.support.IpSupport;
 import com.sparrow.support.ip.SparrowIpSupport;
 import com.sparrow.support.web.CookieUtility;
-import com.sparrow.support.web.GlobalAttributeFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +20,6 @@ public class SparrowAutoConfiguration {
     @ConditionalOnMissingBean(SpringContainer.class)
     public SpringContainer springContainer() {
         return new SpringContainer();
-    }
-
-    @Bean
-    public GlobalAttributeFilter globalAttributeFilter() {
-        return new GlobalAttributeFilter();
     }
 
     @Bean

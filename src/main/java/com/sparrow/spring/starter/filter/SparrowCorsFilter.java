@@ -5,7 +5,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 public class SparrowCorsFilter extends CorsFilter implements OrderedFilter {
-
     private int order;
     public SparrowCorsFilter(CorsConfigurationSource configSource,int order) {
         super(configSource);

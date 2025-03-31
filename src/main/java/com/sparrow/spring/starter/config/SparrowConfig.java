@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,9 +25,10 @@ public class SparrowConfig {
     }
 
     private String profile = "dev";
-    private String allowedOrigins = "*";
+    private Cors cors;
     private Authenticator authenticator;
     private Mvc mvc;
+    private Email email;
 
 
     @Data
@@ -58,9 +60,33 @@ public class SparrowConfig {
         private List<String> autoMappingViewNames;
         private Boolean supportTemplateEngine = false;
         private List<String> ajaxPattens;
+        private String rootPath;
+        private String language;
+        private String resource;
+        private String resourceVersion;
+        private String upload;
+        private String internationalization;
+
 
         public void setAjaxPattens(List<String> ajaxPattens) {
             this.ajaxPattens = RegexUtility.adapterWildcard(ajaxPattens);
         }
+    }
+
+    @Data
+    @ToString
+    public static class Email {
+        private String host;
+        private String from;
+        private String username;
+        private String password;
+        private String localAddress;
+    }
+
+    @Data
+    @ToString
+    public static class Cors{
+        private boolean allow = false;
+        private List<String> allowedOrigins=new ArrayList<>();
     }
 }

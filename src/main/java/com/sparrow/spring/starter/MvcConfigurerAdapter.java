@@ -1,22 +1,21 @@
 package com.sparrow.spring.starter;
 
+import com.sparrow.servlet.CaptchaServlet;
+import com.sparrow.servlet.impl.SessionCaptchaService;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.FlashFilter;
 import com.sparrow.spring.starter.filter.SparrowCorsFilter;
+import com.sparrow.spring.starter.filter.SpringGlobalAttributeFilter;
 import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
 import com.sparrow.spring.starter.resolver.LoginUserArgumentResolvers;
-import com.sparrow.spring.starter.servlet.CaptchaServlet;
 import com.sparrow.spring.starter.servlet.RedisCaptchaService;
-import com.sparrow.spring.starter.servlet.SessionCaptchaService;
 import com.sparrow.support.CaptchaService;
-import com.sparrow.support.web.GlobalAttributeFilter;
+import com.sparrow.support.web.AbstractGlobalAttributeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,11 +26,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 import java.util.List;
@@ -56,14 +57,18 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
 
     @Bean
     public SparrowCorsFilter sparrowCorsFilter() {
-        if (this.sparrowConfig.getAllowedOrigins().equals("false")) {
+        if (!this.sparrowConfig.getCors().isAllow()) {
             return null;
         }
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin(this.sparrowConfig.getAllowedOrigins());
+        List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();
+        for (String allowedOrigin : allowedOrigins) {
+            config.addAllowedOrigin(allowedOrigin);
+        }
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return new SparrowCorsFilter(source, 0);
     }
@@ -84,8 +89,8 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     }
 
     @Bean
-    public GlobalAttributeFilter globalAttributeFilter() {
-        return new GlobalAttributeFilter();
+    public AbstractGlobalAttributeFilter globalAttributeFilter() {
+        return new SpringGlobalAttributeFilter(this.sparrowConfig);
     }
 
     @Bean
@@ -164,17 +169,22 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     /**
      * spring 跨域拦截器配置，在filter 中返回的情况无法生效
      * 如果在拦截器之前生效需要配置 CorsFilter
-     * @see SparrowCorsFilter
      *
      * @param registry
+     * @see SparrowCorsFilter
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        if (this.sparrowConfig.getAllowedOrigins().equals("false")) {
+        if (!this.sparrowConfig.getCors().isAllow()) {
             return;
         }
+        List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();
+        String[] allowedOriginArray = new String[allowedOrigins.size()];
+        allowedOrigins.toArray(allowedOriginArray);
         registry.addMapping("/**")
-                .allowedOrigins(this.sparrowConfig.getAllowedOrigins()).allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
+                .allowedOrigins(allowedOriginArray)
+                .allowCredentials(true)
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
     }
 
     @Bean

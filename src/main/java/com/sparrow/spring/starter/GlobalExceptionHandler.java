@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
         }
         String referer = servletContainer.referer();
         ModelAndViewUtils.failFlash(request, result);
-        String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
+        String rootPath =this.sparrowConfig.getMvc().getRootPath();
         return new ModelAndView("redirect:" + rootPath + "/error?" + referer);
     }
 }
