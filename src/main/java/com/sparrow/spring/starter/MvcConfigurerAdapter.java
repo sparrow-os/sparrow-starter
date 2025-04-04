@@ -64,6 +64,7 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
         CorsConfiguration config = new CorsConfiguration();
         List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();
         for (String allowedOrigin : allowedOrigins) {
+            logger.info("allowedOrigin: " + allowedOrigin);
             config.addAllowedOrigin(allowedOrigin);
         }
         config.addAllowedMethod("*");
