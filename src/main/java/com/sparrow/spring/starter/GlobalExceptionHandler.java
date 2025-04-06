@@ -1,12 +1,10 @@
 package com.sparrow.spring.starter;
 
-import com.sparrow.constant.Config;
 import com.sparrow.protocol.BusinessException;
 import com.sparrow.protocol.Result;
 import com.sparrow.servlet.ServletContainer;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.support.web.ServletUtility;
-import com.sparrow.utility.ConfigUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +40,7 @@ public class GlobalExceptionHandler {
             return Result.fail(e);
         }
         String referer = servletContainer.referer();
-        String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
+        String rootPath =this.sparrowConfig.getMvc().getRootPath();
         ModelAndViewUtils.failFlash(request, Result.fail(e));
         return new ModelAndView("redirect:" + rootPath + "/error?" + referer);
     }

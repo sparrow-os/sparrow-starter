@@ -16,10 +16,8 @@
  */
 package com.sparrow.spring.starter;
 
-import com.sparrow.constant.SysObjectName;
 import com.sparrow.container.impl.SparrowContainer;
-import com.sparrow.utility.ConfigUtility;
-import com.sparrow.utility.StringUtility;
+import com.sparrow.utility.ClassUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -27,19 +25,26 @@ import org.springframework.context.ApplicationContext;
 public class SpringContainer extends SparrowContainer {
     private static Logger logger = LoggerFactory.getLogger(SparrowContainer.class);
 
-    @Override public <T> T getBean(String beanName) {
-        return (T) SpringContext.getContext().getBean(beanName);
+    @Override
+    public <T> T getBean(String beanName) {
+        T o = (T)singletonRegistry.getObject(beanName);
+        if(o!=null){
+            return o;
+        }
+        return  (T) SpringContext.getContext().getBean(beanName);
     }
 
-    @Override public <T> T getBean(SysObjectName objectName) {
-        String beanName = objectName.name().toLowerCase();
-        String defaultBeanName = StringUtility.toHump(beanName, "_");
-        beanName = ConfigUtility.getValue(beanName, defaultBeanName);
+    @Override
+    public <T> T getBean(Class<T> clazz) {
+        T o = (T)singletonRegistry.getObject(ClassUtility.getBeanNameByClass(clazz));
+        if(o!=null){
+            return o;
+        }
         ApplicationContext container = SpringContext.getContext();
         if (container == null) {
             logger.error("container is null");
             return null;
         }
-        return (T) container.getBean(beanName);
+        return container.getBean(clazz);
     }
 }

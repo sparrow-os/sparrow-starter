@@ -40,6 +40,12 @@ import java.util.List;
 @Configuration
 @AutoConfigureAfter(SparrowConfig.class)
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
+
+    public MvcConfigurerAdapter() {
+    logger.info("MvcConfigurerAdapter init");
+    }
+
+
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
 
     @Autowired

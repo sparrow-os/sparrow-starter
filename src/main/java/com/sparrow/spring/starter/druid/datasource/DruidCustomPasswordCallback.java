@@ -9,7 +9,7 @@ import java.util.Properties;
 
 @Slf4j
 public class DruidCustomPasswordCallback extends DruidPasswordCallback {
-    private String passwordKey = "mysql_sparrow_password";
+    private String passwordKey;
     private Boolean debug = false;
 
     public DruidCustomPasswordCallback(String passwordKey, Boolean debug) {

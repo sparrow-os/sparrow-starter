@@ -1,25 +1,33 @@
 package com.sparrow.spring.starter;
 
-import com.sparrow.constant.Config;
 import com.sparrow.core.Pair;
 import com.sparrow.protocol.POJO;
-import com.sparrow.protocol.Param;
 import com.sparrow.protocol.Query;
 import com.sparrow.protocol.Result;
-import com.sparrow.protocol.VO;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.servlet.ServletContainer;
+import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.support.web.HttpContext;
 import com.sparrow.support.web.ServletUtility;
 import com.sparrow.utility.ClassUtility;
-import com.sparrow.utility.ConfigUtility;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 public class ModelAndViewUtils {
+    public static <T extends POJO> String extractedPojoKey(T o) {
+        if (o == null) {
+            return null;
+        }
+        if (o instanceof Query) {
+            return QUERY;
+        }
+        return ClassUtility.getBeanNameByClass(o.getClass());
+    }
     private static final String QUERY = "query";
 
     /**
@@ -31,21 +39,15 @@ public class ModelAndViewUtils {
      * @return
      */
     public static ModelAndView redirect(String url) {
-        ServletContainer servletContainer = SpringContext.getContext().getBean(ServletContainer.class);
+        ApplicationContext applicationContext = SpringContext.getContext();
+        ServletContainer servletContainer = applicationContext.getBean(ServletContainer.class);
         successFlash(servletContainer.getRequest(), url);
-        String rootPath = ConfigUtility.getValue(Config.ROOT_PATH);
+        SparrowConfig sparrowConfig =applicationContext.getBean(SparrowConfig.class);
+        String rootPath = sparrowConfig.getMvc().getRootPath();
         return new ModelAndView("redirect:" + rootPath + "/transit?" + url);
     }
 
-    public static <T extends POJO> String extractedPojoKey(T o) {
-        if (o == null) {
-            return null;
-        }
-        if (o instanceof Query) {
-            return QUERY;
-        }
-        return ClassUtility.getEntityNameByClass(o.getClass());
-    }
+
 
     /**
      * flash param aspect 预先加载参数
@@ -58,8 +60,9 @@ public class ModelAndViewUtils {
     }
 
     public static Object flash(String key) {
+        ServletUtility servletUtility = ServletUtility.getInstance();
         ServletContainer servletContainer = SpringContext.getContext().getBean(ServletContainer.class);
-        String flashUrl = ServletUtility.getInstance().assembleActualUrl(servletContainer.getActionKey());
+        String flashUrl = servletUtility.assembleActualUrl(servletUtility.getActionKey(servletContainer.getRequest()));
         Pair<String, Map<String, Object>> flash = (Pair<String, Map<String, Object>>) servletContainer.getRequest().getSession().getAttribute(Constant.FLASH_KEY);
         if (flash == null) {
             return null;

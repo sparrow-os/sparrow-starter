@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * spring 实现的flash 是url 变化后自动清除session
+ * 本方案支持中间跳转状态保持功能
+ * ModelAndViewUtils 为实现该功能提供工具类
+ */
 public class FlashFilter extends OncePerRequestFilter implements OrderedFilter {
 
     private int order = 0;
@@ -34,10 +39,9 @@ public class FlashFilter extends OncePerRequestFilter implements OrderedFilter {
         }
         //redirect actual url
         String actualUrl = servletUtility.assembleActualUrl(actionKey);
-        if (StringUtility.matchUrl(flashKey, actualUrl)) {
-            return true;
-        }
+        if (StringUtility.matchUrl(flashKey, actualUrl))
         //transit url
+
         actionKey = request.getQueryString();
         if (actionKey == null) {
             return false;
