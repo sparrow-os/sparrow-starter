@@ -12,11 +12,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 
-@Configuration
 @ConditionalOnClass(DruidDataSource.class)
 @AutoConfigureBefore({SparrowDataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @AutoConfigureAfter(SparrowConfig.class)
@@ -25,7 +24,9 @@ public class DruidDataSourceAutoConfiguration {
     @Autowired
     private SparrowConfig sparrowConfig;
 
-    @Bean
+
+
+    @Inject
     public DruidCustomPasswordCallback passwordCallback() {
         return new DruidCustomPasswordCallback(this.sparrowConfig.getDataSource().getPasswordKey(),
                 this.sparrowConfig.getDataSource().getDebugDatasourcePassword());

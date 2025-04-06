@@ -1,14 +1,13 @@
 package com.sparrow.spring.starter;
 
-import com.sparrow.datasource.*;
+import com.sparrow.datasource.ConnectionPool;
+import com.sparrow.datasource.ConnectionProxyContainer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Configuration
 @ConditionalOnClass(ConnectionPool.class)
 public class SparrowDataSourceAutoConfiguration {
     @Bean

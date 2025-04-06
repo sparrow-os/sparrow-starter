@@ -12,7 +12,6 @@ import org.thymeleaf.TemplateEngine;
 
 import java.util.List;
 
-@Configuration
 @AutoConfigureAfter({SparrowConfig.class, ThymeleafProperties.class})
 @ConditionalOnClass(TemplateEngine.class)
 public class TemplateEngineAutoconfiguration implements WebMvcConfigurer {

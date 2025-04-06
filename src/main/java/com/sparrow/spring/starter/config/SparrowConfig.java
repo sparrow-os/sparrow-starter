@@ -2,13 +2,11 @@ package com.sparrow.spring.starter.config;
 
 import com.sparrow.datasource.DatasourceConfigReader;
 import com.sparrow.protocol.constant.Constant;
-import com.sparrow.spring.starter.SpringContext;
 import com.sparrow.support.AuthenticatorConfigReader;
 import com.sparrow.support.web.WebConfigReader;
 import com.sparrow.utility.RegexUtility;
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
