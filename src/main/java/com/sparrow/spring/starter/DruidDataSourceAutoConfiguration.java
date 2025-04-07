@@ -24,8 +24,6 @@ public class DruidDataSourceAutoConfiguration {
     @Autowired
     private SparrowConfig sparrowConfig;
 
-
-
     @Inject
     public DruidCustomPasswordCallback passwordCallback() {
         return new DruidCustomPasswordCallback(this.sparrowConfig.getDataSource().getPasswordKey(),

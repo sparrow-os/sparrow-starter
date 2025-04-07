@@ -2,12 +2,14 @@ package com.sparrow.spring.starter;
 
 import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.ConnectionProxyContainer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import javax.sql.DataSource;
 
+@Slf4j
 @ConditionalOnClass(ConnectionPool.class)
 public class SparrowDataSourceAutoConfiguration {
     @Bean
@@ -35,7 +37,7 @@ public class SparrowDataSourceAutoConfiguration {
     @Bean(name = "sparrow_default")
     @ConditionalOnMissingBean(DataSource.class)
     public ConnectionPool sparrow_default(ConnectionProxyContainer connectionProxyContainer) {
-        System.out.println("sparrow_default datasource init ....");
+        log.info("sparrow_default datasource init ....");
         //兼容spring 注入方式
         return new ConnectionPool("sparrow_default", connectionProxyContainer);
     }

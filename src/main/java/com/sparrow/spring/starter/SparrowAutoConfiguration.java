@@ -12,33 +12,33 @@ import com.sparrow.support.IpSupport;
 import com.sparrow.support.ip.SparrowIpSupport;
 import com.sparrow.support.web.CookieUtility;
 import com.sparrow.support.web.WebConfigReader;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+
+@Slf4j
 public class SparrowAutoConfiguration {
     public SparrowAutoConfiguration() {
-        System.out.println("Sparrow Auto Configuration INIT");
+        log.info("Sparrow Auto Configuration INIT");
     }
 
     @Autowired
     private SparrowConfig sparrowConfig;
 
     @Bean
-    public AuthenticatorConfigReader authenticatorConfigReader(){
+    public AuthenticatorConfigReader authenticatorConfigReader() {
         return sparrowConfig.getAuthenticator();
     }
 
     @Bean
-    public WebConfigReader webConfigReader(){
+    public WebConfigReader webConfigReader() {
         return this.sparrowConfig.getMvc();
     }
 
     @Bean
-    public DatasourceConfigReader datasourceConfigReader(){
+    public DatasourceConfigReader datasourceConfigReader() {
         return sparrowConfig.getDataSource();
     }
 
@@ -75,11 +75,9 @@ public class SparrowAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(EmailSender.class)
+    @ConditionalOnProperty(prefix = "sparrow.email", name = "enabled", havingValue = "true")
     public EmailSender emailSender() {
         SparrowConfig.Email email = sparrowConfig.getEmail();
-        if(email == null){
-            return new EmailSender();
-        }
         return new EmailSender(email.getLocalAddress(), email.getHost(), email.getFrom(), email.getUsername(), email.getPassword());
     }
 
@@ -88,5 +86,4 @@ public class SparrowAutoConfiguration {
     public ImageExtractorRegistry imageExtractorRegistry() {
         return new ImageExtractorRegistry();
     }
-
 }

@@ -40,13 +40,10 @@ import java.util.List;
 @Configuration
 @AutoConfigureAfter(SparrowConfig.class)
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
-
-    public MvcConfigurerAdapter() {
-    logger.info("MvcConfigurerAdapter init");
-    }
-
-
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
+    public MvcConfigurerAdapter() {
+        logger.info("MvcConfigurerAdapter init");
+    }
 
     @Autowired
     private SparrowConfig sparrowConfig;
@@ -62,10 +59,8 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "sparrow.cors", name = "allow", havingValue = "true")
     public SparrowCorsFilter sparrowCorsFilter() {
-        if (!this.sparrowConfig.getCors().isAllow()) {
-            return null;
-        }
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();

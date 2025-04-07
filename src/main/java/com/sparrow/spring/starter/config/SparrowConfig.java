@@ -7,6 +7,7 @@ import com.sparrow.support.web.WebConfigReader;
 import com.sparrow.utility.RegexUtility;
 import lombok.Data;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -24,9 +25,10 @@ import java.util.List;
  * 学习文档
  * https://sparrowzoo.feishu.cn/docx/HatsdGWMeoi036x28vQcsKeNnOb
  */
+@Slf4j
 public class SparrowConfig {
     public SparrowConfig() {
-        System.out.println("SparrowConfig init");
+        log.info("SparrowConfig init");
     }
 
     private String profile = "dev";
@@ -45,9 +47,11 @@ public class SparrowConfig {
         private Boolean validateDeviceId = true;
         private Boolean validateStatus = true;
         private List<String> excludePatterns;
+
         public void setExcludePatterns(List<String> excludePatterns) {
             this.excludePatterns = RegexUtility.adapterWildcard(excludePatterns);
         }
+
         private Boolean mockLoginUser = false;
         private Integer tokenAvailableDays = 7;
     }
@@ -76,12 +80,15 @@ public class SparrowConfig {
         private String physicalUpload;
         private String physicalResource;
         private String waterMark;
+        private String download;
+        private String physicalDownload;
 
     }
 
     @Data
     @ToString
     public static class Email {
+        private Boolean enabled = false;
         private String host;
         private String from;
         private String username;
@@ -91,9 +98,9 @@ public class SparrowConfig {
 
     @Data
     @ToString
-    public static class Cors{
+    public static class Cors {
         private boolean allow = false;
-        private List<String> allowedOrigins=new ArrayList<>();
+        private List<String> allowedOrigins = new ArrayList<>();
 
     }
 
