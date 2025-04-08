@@ -83,6 +83,9 @@ public class SparrowConfig {
         private String download;
         private String physicalDownload;
 
+        public void setAjaxPattens(List<String> ajaxPattens) {
+            this.ajaxPattens = RegexUtility.adapterWildcard(ajaxPattens);
+        }
     }
 
     @Data
