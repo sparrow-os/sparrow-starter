@@ -1,5 +1,6 @@
 package com.sparrow.spring.starter;
 
+import com.sparrow.constant.Config;
 import com.sparrow.datasource.DatasourceConfigReader;
 import com.sparrow.email.EmailSender;
 import com.sparrow.image.ImageExtractorRegistry;
@@ -12,6 +13,7 @@ import com.sparrow.support.IpSupport;
 import com.sparrow.support.ip.SparrowIpSupport;
 import com.sparrow.support.web.CookieUtility;
 import com.sparrow.support.web.WebConfigReader;
+import com.sparrow.utility.StringUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -78,7 +80,11 @@ public class SparrowAutoConfiguration {
     @ConditionalOnProperty(prefix = "sparrow.email", name = "enabled", havingValue = "true")
     public EmailSender emailSender() {
         SparrowConfig.Email email = sparrowConfig.getEmail();
-        return new EmailSender(email.getLocalAddress(), email.getHost(), email.getFrom(), email.getUsername(), email.getPassword());
+        String emailPassword = System.getenv(Config.EMAIL_PASSWORD);
+        if (StringUtility.isNullOrEmpty(emailPassword)) {
+            emailPassword = emailPassword;
+        }
+        return new EmailSender(email.getLocalAddress(), email.getHost(), email.getFrom(), email.getUsername(), emailPassword);
     }
 
     @Bean
