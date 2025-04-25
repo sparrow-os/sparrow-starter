@@ -63,6 +63,7 @@ public class SparrowConfig {
         private Boolean supportTemplateEngine = false;
         private List<String> ajaxPattens;
         private String rootPath;
+        private String passport;
         private String language;
         private String resource;
         private String resourceVersion;
