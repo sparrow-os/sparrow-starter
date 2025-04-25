@@ -97,6 +97,7 @@ public class SparrowConfig {
         private String username;
         private String password;
         private String localAddress;
+        private Boolean debugPassword;
     }
 
     @Data

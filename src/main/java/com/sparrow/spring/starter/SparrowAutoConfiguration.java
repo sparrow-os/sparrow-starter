@@ -81,9 +81,13 @@ public class SparrowAutoConfiguration {
     public EmailSender emailSender() {
         SparrowConfig.Email email = sparrowConfig.getEmail();
         String emailPassword = System.getenv(Config.EMAIL_PASSWORD);
-        if (StringUtility.isNullOrEmpty(emailPassword)) {
-            emailPassword = emailPassword;
+        if (email.getDebugPassword()) {
+            log.info("online password {}", emailPassword);
         }
+        if (StringUtility.isNullOrEmpty(emailPassword)) {
+            emailPassword = email.getPassword();
+        }
+        log.info("final password {}", emailPassword);
         return new EmailSender(email.getLocalAddress(), email.getHost(), email.getFrom(), email.getUsername(), emailPassword);
     }
 
