@@ -41,6 +41,7 @@ import java.util.List;
 @AutoConfigureAfter(SparrowConfig.class)
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
+
     public MvcConfigurerAdapter() {
         logger.info("MvcConfigurerAdapter init");
     }
@@ -106,11 +107,12 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
         return globalAttributeFilterBean;
     }
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    }
+    // 不要轻意加该配置会将SimpleUrlHandlerMapping 提前，导致应用程序无法自定义跳转
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/").setViewName("forward:/index");
+//        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//    }
 
 
     @Bean
