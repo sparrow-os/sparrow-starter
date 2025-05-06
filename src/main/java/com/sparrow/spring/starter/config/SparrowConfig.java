@@ -47,6 +47,10 @@ public class SparrowConfig {
         private Boolean validateDeviceId = true;
         private Boolean validateStatus = true;
         private List<String> excludePatterns;
+        /**
+         * 平台用户类型
+         */
+        private Integer platform;
 
         public void setExcludePatterns(List<String> excludePatterns) {
             this.excludePatterns = RegexUtility.adapterWildcard(excludePatterns);
@@ -98,7 +102,7 @@ public class SparrowConfig {
         private String username;
         private String password;
         private String localAddress;
-        private Boolean debugPassword;
+        private Boolean debugPassword=false;
     }
 
     @Data
