@@ -51,13 +51,24 @@ public class SparrowConfig {
          * 平台用户类型
          */
         private Integer platform;
+        private Boolean mockLoginUser = false;
+        private Double tokenAvailableDays = 7D;
+        private Double loginTokenAvailableDays;
+        private Double rememberMeDays;
 
         public void setExcludePatterns(List<String> excludePatterns) {
             this.excludePatterns = RegexUtility.adapterWildcard(excludePatterns);
         }
 
-        private Boolean mockLoginUser = false;
-        private Integer tokenAvailableDays = 7;
+        @Override
+        public Double getLoginTokenAvailableDays() {
+            return this.loginTokenAvailableDays;
+        }
+
+        @Override
+        public Double getRememberMeDays() {
+            return this.rememberMeDays;
+        }
     }
 
     @Data
@@ -102,7 +113,7 @@ public class SparrowConfig {
         private String username;
         private String password;
         private String localAddress;
-        private Boolean debugPassword=false;
+        private Boolean debugPassword = false;
     }
 
     @Data
@@ -116,6 +127,10 @@ public class SparrowConfig {
     @Data
     @ToString
     public static class DataSource implements DatasourceConfigReader {
+        public DataSource() {
+            log.info("data source config init");
+        }
+
         private String defaultSchema;
         private String passwordKey;
         private Boolean debugDatasourcePassword;

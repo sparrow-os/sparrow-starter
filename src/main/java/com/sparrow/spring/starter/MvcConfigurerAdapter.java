@@ -179,7 +179,8 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        if (!this.sparrowConfig.getCors().isAllow()) {
+        if (this.sparrowConfig.getCors()==null||!this.sparrowConfig.getCors().isAllow()) {
+            logger.warn("cors config not found !");
             return;
         }
         List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();

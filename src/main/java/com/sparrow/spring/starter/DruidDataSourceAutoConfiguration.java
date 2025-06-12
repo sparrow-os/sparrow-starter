@@ -5,6 +5,7 @@ import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.druid.datasource.DruidCustomPasswordCallback;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -19,6 +20,7 @@ import javax.sql.DataSource;
 @ConditionalOnClass(DruidDataSource.class)
 @AutoConfigureBefore({SparrowDataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @AutoConfigureAfter(SparrowConfig.class)
+@Slf4j
 public class DruidDataSourceAutoConfiguration {
 
     @Autowired
@@ -26,6 +28,10 @@ public class DruidDataSourceAutoConfiguration {
 
     @Inject
     public DruidCustomPasswordCallback passwordCallback() {
+        if(this.sparrowConfig.getDataSource()==null){
+            log.warn("data source config not found !");
+            return null;
+        }
         return new DruidCustomPasswordCallback(this.sparrowConfig.getDataSource().getPasswordKey(),
                 this.sparrowConfig.getDataSource().getDebugDatasourcePassword());
     }
