@@ -30,7 +30,7 @@ public class SparrowORMAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(DataSourceFactoryImpl.class)
     @ConditionalOnBean(DataSource.class)
-    public DataSourceFactoryImpl dataSourceFactory() {
+    public DataSourceFactory dataSourceFactory() {
         return new DataSourceFactoryImpl();
     }
 
@@ -40,13 +40,15 @@ public class SparrowORMAutoConfiguration {
     }
 
     @Bean
-    public TransactionManager transactionManager(ConnectionContextHolder connectionContextHolder, DataSourceFactory dataSourceFactory) {
+    @ConditionalOnBean(DataSourceFactory.class)
+    public TransactionManager transactionManager(ConnectionContextHolder connectionContextHolder,
+                                                 DataSourceFactory dataSourceFactory) {
         return new SparrowTransactionManager(connectionContextHolder, dataSourceFactory);
     }
 
     @Bean
+    @ConditionalOnBean(DataSourceFactory.class)
     public DataSourceDispatcher dataSourceDispatcher(DataSourceFactory dataSourceFactory) {
         return new DefaultDataSourceDispatcher(dataSourceFactory);
     }
-
 }
