@@ -9,9 +9,11 @@ import com.sparrow.orm.transaction.ConnectionContextHolderImpl;
 import com.sparrow.orm.transaction.SparrowTransactionManager;
 import com.sparrow.protocol.dao.DataSourceDispatcher;
 import com.sparrow.transaction.TransactionManager;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +21,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnClass(DBORMTemplate.class)
+@AutoConfigureBefore(DataSourceTransactionManagerAutoConfiguration.class)
 public class SparrowORMAutoConfiguration {
 
     /**
@@ -41,7 +44,7 @@ public class SparrowORMAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(DataSourceFactory.class)
-    public TransactionManager transactionManager(ConnectionContextHolder connectionContextHolder,
+    public TransactionManager sparrowTransactionManager(ConnectionContextHolder connectionContextHolder,
                                                  DataSourceFactory dataSourceFactory) {
         return new SparrowTransactionManager(connectionContextHolder, dataSourceFactory);
     }
