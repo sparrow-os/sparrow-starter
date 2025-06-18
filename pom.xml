@@ -44,6 +44,7 @@
         <dependency>
             <groupId>com.sparrowzoo</groupId>
             <artifactId>sparrow-container</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.sparrowzoo</groupId>
@@ -87,19 +88,9 @@
         </dependency>
 
         <dependency>
-            <groupId>net.agkn</groupId>
-            <artifactId>hll</artifactId>
-            <version>1.6.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.roaringbitmap</groupId>
             <artifactId>RoaringBitmap</artifactId>
             <version>0.9.44</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
