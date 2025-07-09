@@ -2,11 +2,12 @@ package com.sparrow.spring.starter.message.converter;
 
 import com.sparrow.core.spi.JsonFactory;
 import com.sparrow.json.Json;
+import com.sparrow.protocol.DTO;
 import com.sparrow.protocol.Result;
-import com.sparrow.protocol.VO;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import javax.inject.Named;
+
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -15,7 +16,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
 @Deprecated
-public class VOJsonMessageConverter extends AbstractHttpMessageConverter<VO> {
+public class VOJsonMessageConverter extends AbstractHttpMessageConverter<DTO> {
     private Json json = JsonFactory.getProvider();
 
     public VOJsonMessageConverter() {
@@ -28,19 +29,19 @@ public class VOJsonMessageConverter extends AbstractHttpMessageConverter<VO> {
     }
 
     @Override
-    protected VO readInternal(Class<? extends VO> clazz,
-        HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+    protected DTO readInternal(Class<? extends DTO> clazz,
+                               HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         return null;
     }
 
     @Override
-    protected void writeInternal(VO result,
-        HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+    protected void writeInternal(DTO result,
+                                 HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
         if (result instanceof Result) {
             outputMessage.getBody().write(this.json.toString(result).getBytes());
             return;
         }
-        Result<VO> voResult = new Result<VO>(result);
+        Result<DTO> voResult = new Result<DTO>(result);
         outputMessage.getBody().write(this.json.toString(voResult).getBytes());
     }
 }

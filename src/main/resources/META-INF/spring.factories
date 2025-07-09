@@ -9,7 +9,8 @@ com.sparrow.spring.starter.config.orm.SparrowORMAutoConfiguration,\
 com.sparrow.spring.starter.config.orm.release.SparrowReleaserAutoConfiguration,\
 com.sparrow.spring.starter.config.orm.release.OtherReleaserAutoConfiguration,\
 com.sparrow.spring.starter.MvcConfigurerAdapter,\
-com.sparrow.spring.starter.TemplateEngineAutoconfiguration
+com.sparrow.spring.starter.TemplateEngineAutoconfiguration,\
+com.sparrow.spring.starter.EnumsAutoConfiguration
 
 
 

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.DependsOn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Configuration
@@ -37,6 +38,15 @@ public class SparrowConfig {
     private Mvc mvc;
     private Email email;
     private DataSource dataSource;
+    private Enums enums;
+
+    @Data
+    @ToString
+    public static class Enums {
+        private List<String> coder;
+
+        private List<String> business;
+    }
 
 
     @Data
