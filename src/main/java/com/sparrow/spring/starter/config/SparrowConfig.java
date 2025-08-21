@@ -1,23 +1,18 @@
 package com.sparrow.spring.starter.config;
 
 import com.sparrow.datasource.DatasourceConfigReader;
-import com.sparrow.protocol.constant.Constant;
-import com.sparrow.support.AuthenticatorConfigReader;
 import com.sparrow.support.web.WebConfigReader;
 import com.sparrow.utility.RegexUtility;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
-@Configuration
 @ConfigurationProperties(prefix = "sparrow")
 @Data
 @DependsOn("springContext")
@@ -34,7 +29,6 @@ public class SparrowConfig {
 
     private String profile = "dev";
     private Cors cors;
-    private Authenticator authenticator;
     private Mvc mvc;
     private Email email;
     private DataSource dataSource;
@@ -48,38 +42,6 @@ public class SparrowConfig {
         private List<String> business;
     }
 
-
-    @Data
-    @ToString
-    public static class Authenticator implements AuthenticatorConfigReader {
-        private String tokenKey = Constant.REQUEST_HEADER_KEY_LOGIN_TOKEN;
-        private String encryptKey;
-        private Boolean validateDeviceId = true;
-        private Boolean validateStatus = true;
-        private List<String> excludePatterns;
-        /**
-         * 平台用户类型
-         */
-        private Integer platform;
-        private Boolean mockLoginUser = false;
-        private Double tokenAvailableDays = 7D;
-        private Double loginTokenAvailableDays;
-        private Double rememberMeDays;
-
-        public void setExcludePatterns(List<String> excludePatterns) {
-            this.excludePatterns = RegexUtility.adapterWildcard(excludePatterns);
-        }
-
-        @Override
-        public Double getLoginTokenAvailableDays() {
-            return this.loginTokenAvailableDays;
-        }
-
-        @Override
-        public Double getRememberMeDays() {
-            return this.rememberMeDays;
-        }
-    }
 
     @Data
     @ToString

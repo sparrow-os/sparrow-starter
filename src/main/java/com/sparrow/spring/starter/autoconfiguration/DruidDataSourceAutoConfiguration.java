@@ -1,4 +1,4 @@
-package com.sparrow.spring.starter;
+package com.sparrow.spring.starter.autoconfiguration;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;

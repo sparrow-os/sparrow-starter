@@ -1,5 +1,6 @@
-package com.sparrow.spring.starter;
+package com.sparrow.spring.starter.autoconfiguration;
 
+import com.sparrow.spring.starter.EnumsContainer;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

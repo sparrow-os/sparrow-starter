@@ -1,34 +1,27 @@
 package com.sparrow.spring.starter.filter;
 
+import com.sparrow.context.SessionContext;
 import com.sparrow.protocol.ClientInformation;
-import com.sparrow.protocol.ThreadContext;
 import com.sparrow.protocol.constant.ClientInfoConstant;
 import com.sparrow.protocol.enums.Platform;
 import com.sparrow.spring.starter.SpringServletContainer;
 import com.sparrow.utility.StringUtility;
 import eu.bitwalker.useragentutils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.filter.OrderedFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class ClientInformationFilter implements OrderedFilter {
-    private static Logger logger = LoggerFactory.getLogger(ClientInformationFilter.class);
-
-    public ClientInformationFilter(int order, SpringServletContainer springServletContainer) {
+@Slf4j
+public class ClientInformationFilter implements Filter {
+    public ClientInformationFilter(SpringServletContainer springServletContainer) {
         this.springServletContainer = springServletContainer;
-        this.order = order;
     }
 
     private SpringServletContainer springServletContainer;
-
-    private int order;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse response,
@@ -36,7 +29,7 @@ public class ClientInformationFilter implements OrderedFilter {
         HttpServletRequest request = (HttpServletRequest) req;
         ClientInformation clientInformation = new com.sparrow.protocol.ClientInformation();
         clientInformation.setIp(springServletContainer.getClientIp());
-        logger.info("client ip {}", clientInformation.getIp());
+        log.info("client ip {}", clientInformation.getIp());
         String appId = request.getHeader(ClientInfoConstant.APP_ID);
         if (!StringUtility.isNullOrEmpty(appId)) {
             clientInformation.setAppId(Integer.parseInt(appId));
@@ -51,6 +44,9 @@ public class ClientInformationFilter implements OrderedFilter {
         clientInformation.setChannel(request.getHeader(ClientInfoConstant.CHANNEL));
         clientInformation.setClientVersion(request.getHeader(ClientInfoConstant.CLIENT_VERSION));
 
+        if(request.getHeader(ClientInfoConstant.DEVICE_TYPE)!= null) {
+            clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.valueOf(request.getHeader(ClientInfoConstant.DEVICE_TYPE)));
+        }
         clientInformation.setDevice(request.getHeader(ClientInfoConstant.DEVICE));
         clientInformation.setDeviceId(request.getHeader(ClientInfoConstant.DEVICE_ID));
         clientInformation.setDeviceModel(request.getHeader(ClientInfoConstant.DEVICE_MODEL));
@@ -82,30 +78,25 @@ public class ClientInformationFilter implements OrderedFilter {
         clientInformation.setUserAgent(request.getHeader(ClientInfoConstant.USER_AGENT));
         UserAgent userAgent = UserAgent.parseUserAgentString(clientInformation.getUserAgent());
         OperatingSystem os = userAgent.getOperatingSystem();
+        clientInformation.setOs(os.getGroup().getName());
         Browser browser = userAgent.getBrowser();
-        logger.info("device type {},browser type {}", os.getDeviceType(), browser.getBrowserType());
-        if (os.getDeviceType().equals(DeviceType.COMPUTER) || BrowserType.MOBILE_BROWSER.equals(browser.getBrowserType())) {
-            clientInformation.setOs(os.getGroup().getName());
+        clientInformation.setDevice(browser.getName());
+        clientInformation.setDeviceId(clientInformation.getIp());
+        log.info("device type {},browser type {}", os.getDeviceType(), browser.getBrowserType());
+        if (os.getDeviceType().equals(DeviceType.COMPUTER)) {
             clientInformation.setPlatform(Platform.PC);
-            clientInformation.setDevice(browser.getName());
-            clientInformation.setDeviceId(clientInformation.getIp());
+            clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.PC);
+        }
+        if(browser.getBrowserType().equals(BrowserType.MOBILE_BROWSER)){
+            clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.MOBILE);
         }
 
         String simulate = request.getHeader(ClientInfoConstant.SIMULATE);
         if (!StringUtility.isNullOrEmpty(simulate)) {
             clientInformation.setSimulate(Boolean.valueOf(simulate));
         }
-        ThreadContext.bindClientInfo(clientInformation);
+        SessionContext.bindClientInfo(clientInformation);
         chain.doFilter(request, response);
-        ThreadContext.clearClient();
-    }
-
-    @Override
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
+        SessionContext.clearClient();
     }
 }

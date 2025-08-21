@@ -1,4 +1,4 @@
-package com.sparrow.spring.starter;
+package com.sparrow.spring.starter.autoconfiguration;
 
 import com.sparrow.spring.starter.redis.OperateLimiter;
 import com.sparrow.spring.starter.redis.RedisOperateLimiter;

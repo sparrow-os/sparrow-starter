@@ -1,4 +1,4 @@
-package com.sparrow.spring.starter.config.orm;
+package com.sparrow.spring.starter.autoconfiguration.orm;
 
 import com.sparrow.datasource.ConnectionContextHolder;
 import com.sparrow.datasource.DataSourceFactory;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Configuration
+
 @ConditionalOnClass(DBORMTemplate.class)
 @AutoConfigureBefore(DataSourceTransactionManagerAutoConfiguration.class)
 public class SparrowORMAutoConfiguration {
@@ -45,7 +45,7 @@ public class SparrowORMAutoConfiguration {
     @Bean
     @ConditionalOnBean(DataSourceFactory.class)
     public TransactionManager sparrowTransactionManager(ConnectionContextHolder connectionContextHolder,
-                                                 DataSourceFactory dataSourceFactory) {
+                                                        DataSourceFactory dataSourceFactory) {
         return new SparrowTransactionManager(connectionContextHolder, dataSourceFactory);
     }
 

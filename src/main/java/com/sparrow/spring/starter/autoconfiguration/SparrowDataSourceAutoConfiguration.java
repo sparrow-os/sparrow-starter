@@ -1,4 +1,4 @@
-package com.sparrow.spring.starter;
+package com.sparrow.spring.starter.autoconfiguration;
 
 import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.ConnectionProxyContainer;

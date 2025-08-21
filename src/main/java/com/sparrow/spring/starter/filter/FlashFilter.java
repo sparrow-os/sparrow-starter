@@ -7,6 +7,7 @@ import com.sparrow.utility.StringUtility;
 import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,7 @@ import java.util.Map;
  * 本方案支持中间跳转状态保持功能
  * ModelAndViewUtils 为实现该功能提供工具类
  */
-public class FlashFilter extends OncePerRequestFilter implements OrderedFilter {
-
-    private int order = 0;
+public class FlashFilter extends OncePerRequestFilter implements Filter {
     private static ServletUtility servletUtility = ServletUtility.getInstance();
 
     /**
@@ -91,15 +90,5 @@ public class FlashFilter extends OncePerRequestFilter implements OrderedFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String actionKey = servletUtility.getActionKey(request);
         return actionKey.endsWith("favicon.ico");
-    }
-
-
-    @Override
-    public int getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
     }
 }

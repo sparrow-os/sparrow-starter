@@ -1,11 +1,11 @@
-package com.sparrow.spring.starter.config.orm.release;
+package com.sparrow.spring.starter.autoconfiguration.orm.release;
 
 import com.sparrow.datasource.ConnectionPool;
 import com.sparrow.datasource.ConnectionProxyContainer;
 import com.sparrow.datasource.ConnectionReleaser;
 import com.sparrow.datasource.SparrowConnectionReleaser;
-import com.sparrow.spring.starter.DruidDataSourceAutoConfiguration;
-import com.sparrow.spring.starter.SparrowDataSourceAutoConfiguration;
+import com.sparrow.spring.starter.autoconfiguration.DruidDataSourceAutoConfiguration;
+import com.sparrow.spring.starter.autoconfiguration.SparrowDataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
  * 并且ConnectionProxyContainer 实例与
  * ConnectionPool 实例同时存在，则一定是sparrow 自己的数据源
  */
-@Configuration
+
 @ConditionalOnClass({SparrowConnectionReleaser.class, ConnectionProxyContainer.class, ConnectionPool.class})
 @AutoConfigureAfter({SparrowDataSourceAutoConfiguration.class, DruidDataSourceAutoConfiguration.class})
 public class SparrowReleaserAutoConfiguration {
