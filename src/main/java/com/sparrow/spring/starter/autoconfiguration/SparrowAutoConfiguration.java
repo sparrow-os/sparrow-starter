@@ -42,8 +42,8 @@ public class SparrowAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(Monitor.class)
-    public Monitor monitor() {
-        return new Monitor(ipSupport());
+    public Monitor monitor(IpSupport ipSupport) {
+        return new Monitor(ipSupport);
     }
 
     @Bean
