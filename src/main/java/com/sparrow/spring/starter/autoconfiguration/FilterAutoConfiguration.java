@@ -70,17 +70,6 @@ public class FilterAutoConfiguration {
     }
 
 
-
-    @Bean
-    public FilterRegistrationBean<Filter> flashFilterBean() {
-        FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
-        globalAttributeFilterBean.setFilter(flashFilter());
-        globalAttributeFilterBean.addUrlPatterns("/*");
-        globalAttributeFilterBean.setName("flashFilter");
-        globalAttributeFilterBean.setOrder(1);
-        return globalAttributeFilterBean;
-    }
-
     // 不要轻意加该配置会将SimpleUrlHandlerMapping 提前，导致应用程序无法自定义跳转
 //    @Override
 //    public void addViewControllers(ViewControllerRegistry registry) {
@@ -88,26 +77,4 @@ public class FilterAutoConfiguration {
 //        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 //    }
 
-
-    @Bean
-    public FilterRegistrationBean<Filter> globalAttributeFilterBean() {
-        FilterRegistrationBean<Filter> globalAttributeFilterBean = new FilterRegistrationBean<>();
-        globalAttributeFilterBean.setFilter(globalAttributeFilter());
-        globalAttributeFilterBean.addUrlPatterns("/*");
-        globalAttributeFilterBean.setName("globalAttributeFilter");
-        globalAttributeFilterBean.setOrder(1);
-        //多个filter的时候order的数值越小 则优先级越高
-        return globalAttributeFilterBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean<Filter> clientInformationFilterBean() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(clientInformationFilter());
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean.setName("clientInformationFilter");
-        filterRegistrationBean.setOrder(0);
-        //多个filter的时候order的数值越小 则优先级越高
-        return filterRegistrationBean;
-    }
 }

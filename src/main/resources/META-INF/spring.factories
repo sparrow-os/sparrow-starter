@@ -2,6 +2,8 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.sparrow.spring.starter.autoconfiguration.SparrowAutoConfiguration.SpringContextAutoConfiguration,\
 com.sparrow.spring.starter.config.SparrowConfig,\
 com.sparrow.spring.starter.autoconfiguration.SparrowAutoConfiguration,\
+com.sparrow.spring.starter.autoconfiguration.FilterAutoConfiguration,\
+com.sparrow.spring.starter.autoconfiguration.FilterRegistrationBeanAutoConfiguration,\
 com.sparrow.spring.starter.autoconfiguration.RedisAutoConfiguration,\
 com.sparrow.spring.starter.autoconfiguration.SparrowDataSourceAutoConfiguration,\
 com.sparrow.spring.starter.autoconfiguration.DruidDataSourceAutoConfiguration,\
