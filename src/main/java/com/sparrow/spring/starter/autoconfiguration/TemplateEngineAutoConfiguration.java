@@ -1,6 +1,7 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
 import com.sparrow.spring.starter.config.SparrowConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -13,9 +14,10 @@ import java.util.List;
 
 @AutoConfigureAfter({SparrowConfig.class, ThymeleafProperties.class})
 @ConditionalOnClass(TemplateEngine.class)
+@Slf4j
 public class TemplateEngineAutoConfiguration implements WebMvcConfigurer {
     public TemplateEngineAutoConfiguration() {
-        System.out.println("TemplateEngineAutoconfiguration");
+        log.info("TemplateEngineAutoConfiguration init");
     }
 
     @Autowired
