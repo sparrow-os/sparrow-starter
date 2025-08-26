@@ -12,6 +12,7 @@ com.sparrow.spring.starter.autoconfiguration.orm.release.SparrowReleaserAutoConf
 com.sparrow.spring.starter.autoconfiguration.orm.release.OtherReleaserAutoConfiguration,\
 com.sparrow.spring.starter.autoconfiguration.MvcConfigurerAdapter,\
 com.sparrow.spring.starter.autoconfiguration.CaptchaAutoConfiguration,\
+com.sparrow.spring.starter.autoconfiguration.CaptchaAutoConfiguration.RedisCaptchaServiceConfig,\
 com.sparrow.spring.starter.autoconfiguration.TemplateEngineAutoConfiguration,\
 com.sparrow.spring.starter.autoconfiguration.EnumsAutoConfiguration
 
