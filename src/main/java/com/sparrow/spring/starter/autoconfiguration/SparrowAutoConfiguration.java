@@ -7,6 +7,7 @@ import com.sparrow.image.ImageExtractorRegistry;
 import com.sparrow.io.FileService;
 import com.sparrow.io.impl.JDKFileService;
 import com.sparrow.protocol.BeanCopier;
+import com.sparrow.spring.starter.GlobalExceptionHandler;
 import com.sparrow.spring.starter.Interceptor.FlashParamPrepareAspect;
 import com.sparrow.spring.starter.SpringContext;
 import com.sparrow.spring.starter.SpringServletContainer;
@@ -39,6 +40,11 @@ public class SparrowAutoConfiguration {
         return new SparrowIpSupport();
     }
 
+    @Bean
+    @ConditionalOnMissingBean(GlobalExceptionHandler.class)
+    public GlobalExceptionHandler globalExceptionHandler() {
+        return new GlobalExceptionHandler();
+    }
 
     @Bean
     @ConditionalOnMissingBean(Monitor.class)
