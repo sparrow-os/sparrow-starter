@@ -5,6 +5,7 @@ import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.druid.datasource.DruidCustomPasswordCallback;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -16,7 +17,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @ConditionalOnClass(DruidDataSource.class)

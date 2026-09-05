@@ -5,13 +5,12 @@ import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.spring.starter.filter.*;
 import com.sparrow.spring.starter.monitor.Monitor;
 import com.sparrow.support.web.AbstractGlobalAttributeFilter;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import javax.inject.Inject;
 import java.util.List;
 
 @Slf4j

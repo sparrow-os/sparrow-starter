@@ -5,9 +5,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.stereotype.Component;
-
-import javax.inject.Named;
 
 public class SpringContext implements ApplicationContextAware, PriorityOrdered {
     public SpringContext() {

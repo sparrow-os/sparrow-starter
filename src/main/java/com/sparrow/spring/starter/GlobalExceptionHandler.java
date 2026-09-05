@@ -5,6 +5,8 @@ import com.sparrow.protocol.Result;
 import com.sparrow.servlet.ServletContainer;
 import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.support.web.ServletUtility;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

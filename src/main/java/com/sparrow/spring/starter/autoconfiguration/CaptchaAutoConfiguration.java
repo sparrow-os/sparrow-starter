@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @AutoConfigureAfter(SparrowConfig.class)
@@ -34,6 +36,7 @@ public class CaptchaAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "sparrow", name = "captcha.service", havingValue = "session")
+    @ConditionalOnMissingBean(CaptchaService.class)
     public SessionCaptchaService sessionCaptchaService() {
         return new SessionCaptchaService(this.springServletContainer);
     }
@@ -43,6 +46,7 @@ public class CaptchaAutoConfiguration {
     @ConditionalOnClass(RedisTemplate.class)
     public static class RedisCaptchaServiceConfig {
         @Bean
+        @ConditionalOnMissingBean(CaptchaService.class)
         public RedisCaptchaService redisCaptchaService(RedisTemplate redisTemplate) {
             return new RedisCaptchaService(redisTemplate);
         }

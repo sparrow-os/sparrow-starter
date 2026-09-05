@@ -10,10 +10,9 @@ import com.sparrow.spring.starter.config.SparrowConfig;
 import com.sparrow.support.web.HttpContext;
 import com.sparrow.support.web.ServletUtility;
 import com.sparrow.utility.ClassUtility;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;

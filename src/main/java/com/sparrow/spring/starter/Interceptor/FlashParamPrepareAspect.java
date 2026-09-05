@@ -26,7 +26,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.StandardReflectionParameterNameDiscoverer;
 
 import java.lang.reflect.Method;
 
@@ -43,7 +43,7 @@ public class FlashParamPrepareAspect {
         //String methodName = point.getTarget().getClass().getName() + "." + signature.getName();
         Method method = signature.getMethod();
         Object[] args = point.getArgs();
-        LocalVariableTableParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+        StandardReflectionParameterNameDiscoverer parameterNameDiscoverer = new StandardReflectionParameterNameDiscoverer();
         String[] paramNames = parameterNameDiscoverer.getParameterNames(method);
 
         ServletContainer servletContainer = SpringContext.getContext().getBean(ServletContainer.class);

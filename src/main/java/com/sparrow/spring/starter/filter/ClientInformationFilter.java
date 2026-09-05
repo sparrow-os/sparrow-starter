@@ -7,12 +7,9 @@ import com.sparrow.protocol.enums.Platform;
 import com.sparrow.spring.starter.SpringServletContainer;
 import com.sparrow.utility.StringUtility;
 import eu.bitwalker.useragentutils.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j

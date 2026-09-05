@@ -2,11 +2,9 @@ package com.sparrow.spring.starter.autoconfiguration;
 
 import com.sparrow.spring.starter.filter.ClientInformationFilter;
 import com.sparrow.spring.starter.filter.SparrowCorsFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-
-import javax.servlet.Filter;
 
 public class FilterRegistrationBeanAutoConfiguration {
 

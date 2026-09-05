@@ -1,13 +1,13 @@
 package com.sparrow.spring.starter.test;
 
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import java.lang.annotation.*;
@@ -19,7 +19,7 @@ import java.lang.annotation.*;
  *
  * @SpringBootApplication(scanBasePackages = "com.sparrow.*","other.package.*")
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
