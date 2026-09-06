@@ -1,11 +1,10 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
-import com.sparrow.spring.starter.redis.OperateLimiter;
-import com.sparrow.spring.starter.redis.RedisOperateLimiter;
+import com.sparrow.spring.redis.OperateLimiter;
+import com.sparrow.spring.redis.RedisOperateLimiter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;

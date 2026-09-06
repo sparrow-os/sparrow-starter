@@ -1,8 +1,8 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
-import com.sparrow.spring.starter.config.SparrowConfig;
-import com.sparrow.spring.starter.filter.SparrowCorsFilter;
-import com.sparrow.spring.starter.resolver.ClientInfoArgumentResolvers;
+import com.sparrow.spring.config.SparrowConfig;
+import com.sparrow.spring.filter.SparrowCorsFilter;
+import com.sparrow.spring.resolver.ClientInfoArgumentResolvers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

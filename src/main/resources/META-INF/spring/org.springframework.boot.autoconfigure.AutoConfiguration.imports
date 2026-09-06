@@ -1,0 +1,14 @@
+com.sparrow.spring.starter.autoconfiguration.SparrowAutoConfiguration.SpringContextAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.SparrowAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.RedisAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.SparrowDataSourceAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.DruidDataSourceAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.orm.SparrowORMAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.orm.release.SparrowReleaserAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.orm.release.OtherReleaserAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.MvcConfigurerAdapter
+com.sparrow.spring.starter.autoconfiguration.CaptchaAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.CaptchaAutoConfiguration.RedisCaptchaServiceConfig
+com.sparrow.spring.starter.autoconfiguration.TemplateEngineAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.EnumsAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.FilterAutoConfiguration

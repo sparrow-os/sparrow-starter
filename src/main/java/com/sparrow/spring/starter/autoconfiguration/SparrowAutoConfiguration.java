@@ -7,12 +7,12 @@ import com.sparrow.image.ImageExtractorRegistry;
 import com.sparrow.io.FileService;
 import com.sparrow.io.impl.JDKFileService;
 import com.sparrow.protocol.BeanCopier;
-import com.sparrow.spring.starter.GlobalExceptionHandler;
-import com.sparrow.spring.starter.Interceptor.FlashParamPrepareAspect;
-import com.sparrow.spring.starter.SpringContext;
-import com.sparrow.spring.starter.SpringServletContainer;
-import com.sparrow.spring.starter.config.SparrowConfig;
-import com.sparrow.spring.starter.monitor.Monitor;
+import com.sparrow.spring.controller.GlobalExceptionHandler;
+import com.sparrow.spring.Interceptor.FlashParamPrepareAspect;
+import com.sparrow.spring.container.SpringContext;
+import com.sparrow.spring.container.SpringServletContainer;
+import com.sparrow.spring.config.SparrowConfig;
+import com.sparrow.spring.filter.monitor.Monitor;
 import com.sparrow.support.IpSupport;
 import com.sparrow.support.ip.SparrowIpSupport;
 import com.sparrow.support.web.CookieUtility;
@@ -23,8 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+
+@EnableConfigurationProperties(SparrowConfig.class)
 @Slf4j
 public class SparrowAutoConfiguration {
     public SparrowAutoConfiguration() {
@@ -119,6 +122,10 @@ public class SparrowAutoConfiguration {
     }
 
     public static class SpringContextAutoConfiguration {
+        public SpringContextAutoConfiguration() {
+            log.info("SpringContextAutoConfiguration INIT");
+        }
+
         @Bean
         public SpringContext springContext() {
             return new SpringContext();

@@ -1,0 +1,31 @@
+package com.sparrow.spring.filter;
+
+import com.sparrow.spring.filter.monitor.Monitor;
+import com.sparrow.support.web.ServletUtility;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+
+public class AccessMonitorFilter implements Filter {
+    private static final String FAV_ICON = "/favicon.ico";
+    private Monitor monitor;
+
+    public AccessMonitorFilter(Monitor monitor) {
+        this.monitor = monitor;
+    }
+
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String currentServletPath = httpServletRequest.getServletPath();
+        if (FAV_ICON.equals(currentServletPath)) {
+            chain.doFilter(request, response);
+            return;
+        }
+        String ip = ServletUtility.getInstance().getClientIp(request);
+        this.monitor.access(ip);
+        chain.doFilter(request, response);
+    }
+}

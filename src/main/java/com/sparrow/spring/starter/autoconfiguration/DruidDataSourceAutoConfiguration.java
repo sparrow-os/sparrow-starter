@@ -3,8 +3,8 @@ package com.sparrow.spring.starter.autoconfiguration;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper;
-import com.sparrow.spring.starter.config.SparrowConfig;
-import com.sparrow.spring.starter.druid.datasource.DruidCustomPasswordCallback;
+import com.sparrow.spring.config.SparrowConfig;
+import com.sparrow.spring.datasource.druid.DruidCustomPasswordCallback;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +25,9 @@ import javax.sql.DataSource;
 @Slf4j
 public class DruidDataSourceAutoConfiguration {
 
+    public DruidDataSourceAutoConfiguration(){
+        log.info("DruidDataSourceAutoConfiguration init");
+    }
     @Autowired
     private SparrowConfig sparrowConfig;
 

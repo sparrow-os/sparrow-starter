@@ -1,6 +1,6 @@
 package com.sparrow.spring.test.monitor;
 
-import com.sparrow.spring.starter.monitor.Monitor;
+import com.sparrow.spring.filter.monitor.Monitor;
 import java.util.Random;
 
 public class MonitorTest {

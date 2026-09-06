@@ -1,0 +1,27 @@
+package com.sparrow.spring.container;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
+
+public class SpringContext implements ApplicationContextAware, PriorityOrdered {
+    public SpringContext() {
+        System.out.println("SpringContext init");
+    }
+    private static ApplicationContext context;
+
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
+    }
+
+    public static ApplicationContext getContext() {
+        return context;
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
+    }
+}

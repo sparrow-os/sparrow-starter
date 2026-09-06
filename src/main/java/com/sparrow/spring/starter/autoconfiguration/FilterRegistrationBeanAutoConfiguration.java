@@ -1,7 +1,7 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
-import com.sparrow.spring.starter.filter.ClientInformationFilter;
-import com.sparrow.spring.starter.filter.SparrowCorsFilter;
+import com.sparrow.spring.filter.ClientInformationFilter;
+import com.sparrow.spring.filter.SparrowCorsFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

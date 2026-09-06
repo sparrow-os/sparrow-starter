@@ -1,12 +1,13 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
-import com.sparrow.spring.starter.SpringServletContainer;
-import com.sparrow.spring.starter.config.SparrowConfig;
-import com.sparrow.spring.starter.filter.*;
-import com.sparrow.spring.starter.monitor.Monitor;
+import com.sparrow.spring.filter.*;
+import com.sparrow.spring.container.SpringServletContainer;
+import com.sparrow.spring.config.SparrowConfig;
+import com.sparrow.spring.filter.monitor.Monitor;
 import com.sparrow.support.web.AbstractGlobalAttributeFilter;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class FilterAutoConfiguration {
     public FilterAutoConfiguration() {
-        log.info("Sparrow Auto Configuration INIT");
+        log.info("FilterAutoConfiguration INIT");
     }
 
     @Inject
