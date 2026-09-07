@@ -18,12 +18,11 @@ package com.sparrow.spring.container;
 
 import com.sparrow.container.impl.SparrowContainer;
 import com.sparrow.utility.ClassUtility;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
+@Slf4j
 public class SpringContainer extends SparrowContainer {
-    private static Logger logger = LoggerFactory.getLogger(SparrowContainer.class);
 
     @Override
     public <T> T getBean(String beanName) {
@@ -42,7 +41,7 @@ public class SpringContainer extends SparrowContainer {
         }
         ApplicationContext container = SpringContext.getContext();
         if (container == null) {
-            logger.error("container is null");
+            log.error("container is null");
             return null;
         }
         return container.getBean(clazz);

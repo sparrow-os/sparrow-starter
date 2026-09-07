@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Read(//mnt/d/workspace/sparrow/sparrowzoo/**)"
+    ]
+  }
+}

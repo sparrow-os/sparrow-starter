@@ -17,7 +17,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 
-@AutoConfigureAfter(SparrowConfig.class)
 @Slf4j
 public class CaptchaAutoConfiguration {
 
