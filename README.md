@@ -1,105 +1,68 @@
-https://sparrowzoo.feishu.cn/docx/WT7AdTMdEoIeD1xgMhzcg7cOnTg
-
-
 # Sparrow 功能及职责分析
-# 配置Config
-Sparrow Config
 
-#  容器
-- EnumContainer 容器
-- SparrowContainer 容器的Spring 实现SpringContainer
-```azure
-直接用JDK 的SPI 使用Spring 容器，在业务代码不依赖spring 框架时使用
-比如DDD 或者整洁架构中的domain 核心业务层，不直接依赖spring框架，但可以读spring 的bean
-需要在main 依赖sparrow-starter
-```
-- Spring Context 上下文
-- Spring req rep 容器
+> 📖 设计文档：[飞书在线文档](https://sparrowzoo.feishu.cn/docx/WT7AdTMdEoIeD1xgMhzcg7cOnTg)
+>
+> 📖 项目源码分析说明：[项目说明](./项目说明.md)
 
-# MVC Web
-- AOP拦截所有Controller
-  拦截所有Controller 并将结果转换为Result 对象
-  GlobalExceptionHandler
+## 配置 Config
 
-- 默认Controller
-DefaultController
+- `Sparrow Config`：全局配置入口（前缀 `sparrow.*`）。
 
-# 数据源
-Druid 的密码回调
+## 容器
 
-# Filter
+- **EnumContainer 容器**：枚举容器。
+- **SpringContainer 容器**：SparrowContainer 容器的 Spring 实现。
 
-- AccessMonitorFilter
+  > 通过 JDK 的 SPI 直接使用 Spring 容器，适用于业务代码不依赖 Spring 框架的场景，例如 DDD 或整洁架构中的 domain 核心业务层。核心层不直接依赖 Spring，但可以读取 Spring 管理的 Bean。需在 `main` 依赖 `sparrow-starter`。
 
-访问QPS相关指标监控
+- **Spring Context 上下文**。
+- **Spring request/response 容器**：提供当前请求与响应。
 
-- ClientInformationFilter
+## MVC Web
 
-客户端信息收集
+- **AOP 拦截所有 Controller**：拦截所有 Controller 并将结果转换为 `Result` 对象（`GlobalExceptionHandler`）。
+- **默认 Controller**：`DefaultController`。
 
-- FlashFilter
-```
-spring 实现的flash 是url 变化后自动清除session*
-本方案支持中间跳转状态保持功能
-ModelAndViewUtils 为实现该功能提供工具类
-```
-- SparrowCorsFilter
-- SpringGlobalAttributeFilter
+## 数据源
 
-# 拦截器
-- Flash 参数 自定义框架使用
-- Mybatis 参数拦截器
+- **Druid 的密码回调**：支持数据源密码解密。
 
-# MQ
-- Spring MQ Handler 基类
+## Filter
 
-# Mybatis
-状态字段Handler
+- **AccessMonitorFilter**：访问 QPS 相关指标监控。
+- **ClientInformationFilter**：客户端信息收集。
+- **FlashFilter**：
 
-# Redis
-- Redis 流控
-- Redis 验证码
-```azure
-http://localhost:8888/captcha 
-自动初始化验证码的servlet
-```
+  > Spring 原生的 flash 是 URL 变化后自动清除 session；本方案支持中间跳转状态保持功能，`ModelAndViewUtils` 为实现该功能提供工具类。
 
-# Resolver
-- ClientInfoArgumentResolvers
-- LoginUserArgumentResolver 在authenticator-core 中
+- **SparrowCorsFilter**：跨域支持。
+- **SpringGlobalAttributeFilter**：全局属性注入。
 
+## 拦截器
 
+- **Flash 参数**：自定义框架使用。
+- **MyBatis 参数拦截器**：MyBatis 参数处理。
 
+## MQ
 
+- **Spring MQ Handler 基类**：`AbstractSpringMQHandler`。
 
+## MyBatis
 
+- **状态字段 Handler**：`RecordStateTypeHandler`（状态枚举与数据库记录状态互转）。
 
+## Redis
 
+- **Redis 流控**：基于 Redis 的限流。
+- **Redis 验证码**：
 
+  ```text
+  http://localhost:8888/captcha
+  ```
 
+  自动初始化验证码的 Servlet（默认 Session 实现，可切 Redis）。
 
+## Resolver
 
-
-
-
-
-
-
-
-
-
-
-# 
-
-# Interceptor
-
-## FlashParamPrepareAspect
-
-## MybatisInterceptor
-
-
-
-# 容器相关
-
-
-
+- `ClientInfoArgumentResolvers`：Controller 参数自动注入客户端信息。
+- `LoginUserArgumentResolver`：位于 `authenticator-core` 中。
