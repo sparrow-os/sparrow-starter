@@ -1,4 +1,4 @@
-package com.sparrow.spring.controller;
+package com.sparrow.spring.mvc;
 
 import com.sparrow.spring.starter.autoconfiguration.TemplateEngineAutoConfiguration;
 import jakarta.servlet.http.HttpServletRequest;

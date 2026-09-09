@@ -6,6 +6,7 @@ import com.sparrow.spring.container.SpringServletContainer;
 import com.sparrow.spring.config.SparrowConfig;
 import com.sparrow.spring.redis.RedisCaptchaService;
 import com.sparrow.support.CaptchaService;
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -42,7 +43,7 @@ public class CaptchaAutoConfiguration {
     public static class RedisCaptchaServiceConfig {
         @Bean
         @ConditionalOnMissingBean(CaptchaService.class)
-        public RedisCaptchaService redisCaptchaService(RedisTemplate redisTemplate) {
+        public RedisCaptchaService redisCaptchaService(@Named("redisTemplate") RedisTemplate redisTemplate) {
             return new RedisCaptchaService(redisTemplate);
         }
     }

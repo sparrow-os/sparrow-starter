@@ -1,4 +1,4 @@
-package com.sparrow.spring.controller.message.converter;
+package com.sparrow.spring.mvc.message.converter;
 
 import com.sparrow.core.spi.JsonFactory;
 import com.sparrow.json.Json;

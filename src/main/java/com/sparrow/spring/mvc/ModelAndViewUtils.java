@@ -1,4 +1,4 @@
-package com.sparrow.spring;
+package com.sparrow.spring.mvc;
 
 import com.sparrow.core.Pair;
 import com.sparrow.protocol.POJO;

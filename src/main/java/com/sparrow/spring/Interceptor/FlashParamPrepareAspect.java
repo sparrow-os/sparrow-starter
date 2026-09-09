@@ -19,7 +19,7 @@ package com.sparrow.spring.Interceptor;
 
 import com.sparrow.protocol.POJO;
 import com.sparrow.servlet.ServletContainer;
-import com.sparrow.spring.ModelAndViewUtils;
+import com.sparrow.spring.mvc.ModelAndViewUtils;
 import com.sparrow.spring.container.SpringContext;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

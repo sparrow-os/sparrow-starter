@@ -2,16 +2,25 @@ package com.sparrow.spring.starter.autoconfiguration;
 
 import com.sparrow.spring.redis.OperateLimiter;
 import com.sparrow.spring.redis.RedisOperateLimiter;
+import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+@Slf4j
 @ConditionalOnClass(RedisTemplate.class)
+@AutoConfigureBefore(org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class)
 public class RedisAutoConfiguration {
+    public RedisAutoConfiguration() {
+        log.info("RedisAutoConfiguration init");
+    }
+
     /**
      * @param lettuceConnectionFactory
      * @return
@@ -31,9 +40,9 @@ public class RedisAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(StringRedisTemplate.class)
+    @ConditionalOnClass(RedisTemplate.class)
     @ConditionalOnMissingBean(RedisOperateLimiter.class)
-    public OperateLimiter operateLimiter(StringRedisTemplate redisTemplate) {
+    public OperateLimiter operateLimiter(@Named("redisTemplate") RedisTemplate redisTemplate) {
         return new RedisOperateLimiter(redisTemplate);
     }
 }

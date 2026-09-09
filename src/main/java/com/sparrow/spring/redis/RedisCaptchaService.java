@@ -1,6 +1,7 @@
 package com.sparrow.spring.redis;
 
 import com.sparrow.support.CaptchaService;
+import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -11,14 +12,13 @@ public class RedisCaptchaService implements CaptchaService {
     private static final String REDIS_CAPTCHA_KEY = "captcha";
     private RedisTemplate redisTemplate;
 
-
-    public RedisCaptchaService(RedisTemplate redisTemplate) {
+    public RedisCaptchaService(@Named("redisTemplate") RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     @Override
     public String getCaptcha(String sessionId) {
-        String captcha= (String) this.redisTemplate.opsForValue().get(this.getRedisCaptchaKey(sessionId));
+        String captcha = (String) this.redisTemplate.opsForValue().get(this.getRedisCaptchaKey(sessionId));
         log.debug("get captcha from redis, sessionId:{}, captcha:{}", sessionId, captcha);
         return captcha;
     }

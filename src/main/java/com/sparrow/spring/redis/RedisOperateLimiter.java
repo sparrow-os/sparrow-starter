@@ -1,16 +1,18 @@
 package com.sparrow.spring.redis;
 
+import jakarta.inject.Named;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.concurrent.TimeUnit;
 
 public class RedisOperateLimiter implements OperateLimiter {
 
-    public RedisOperateLimiter(StringRedisTemplate redisTemplate) {
+    public RedisOperateLimiter(@Named("redisTemplate") RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
 
     public boolean renewalLimit(String key, Integer times, Long expires) {
         Long currentTimes = redisTemplate.opsForValue().increment(key);
