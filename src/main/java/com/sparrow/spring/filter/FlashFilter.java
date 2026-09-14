@@ -1,10 +1,12 @@
 package com.sparrow.spring.filter;
 
 import com.sparrow.core.Pair;
+import com.sparrow.lang.url.UrlMatcher;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.support.web.ServletUtility;
-import com.sparrow.utility.StringUtility;
-import jakarta.servlet.*;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,40 +22,6 @@ import java.util.Map;
 public class FlashFilter extends OncePerRequestFilter implements Filter {
     private static ServletUtility servletUtility = ServletUtility.getInstance();
 
-    /**
-     * flash key -->/template/action-url.jsp
-     * <p>
-     * direct mode action url-->action-url
-     * <p>
-     * <p>
-     * transit mode transit url--> transit-url?action_url
-     */
-    private boolean matchUrl(String flashKey, String actionKey, HttpServletRequest request) {
-        //redirect url
-        if (StringUtility.matchUrl(flashKey, actionKey)) {
-            return true;
-        }
-        //redirect actual url
-        String actualUrl = servletUtility.assembleActualUrl(actionKey);
-        if (StringUtility.matchUrl(flashKey, actualUrl))
-        //transit url
-
-        actionKey = request.getQueryString();
-        if (actionKey == null) {
-            return false;
-        }
-        if (StringUtility.matchUrl(flashKey, actionKey)) {
-            return true;
-        }
-
-        //transit actual url
-        String actualTransitUrl = servletUtility.assembleActualUrl(actionKey);
-        if (StringUtility.matchUrl(flashKey, actualTransitUrl)) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
@@ -64,7 +32,7 @@ public class FlashFilter extends OncePerRequestFilter implements Filter {
             return;
         }
 
-        if (this.matchUrl(sessionPair.getFirst(), actionKey, request)) {
+        if (new UrlMatcher(sessionPair.getFirst(), actionKey).match(request)) {
             Map<String, Object> values = sessionPair.getSecond();
             for (String key : values.keySet()) {
                 request.setAttribute(key, values.get(key));

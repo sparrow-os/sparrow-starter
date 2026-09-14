@@ -1,6 +1,9 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
+import com.sparrow.constant.CacheNames;
 import com.sparrow.constant.Config;
+import com.sparrow.core.cache.Cache;
+import com.sparrow.core.cache.StringSoftExpirableCache;
 import com.sparrow.datasource.DatasourceConfigReader;
 import com.sparrow.email.EmailSender;
 import com.sparrow.image.ImageExtractorRegistry;
@@ -35,6 +38,12 @@ public class SparrowAutoConfiguration {
 
     @Autowired
     private SparrowConfig sparrowConfig;
+
+    @Bean(name = CacheNames.ACTION_URL_CACHE)
+    @ConditionalOnMissingBean(name = CacheNames.ACTION_URL_CACHE)
+    public Cache<String, String> actionUrlCache() {
+        return new StringSoftExpirableCache(CacheNames.ACTION_URL_CACHE, sparrowConfig.getMvc().getActionUrlCacheExpiredSeconds());
+    }
 
     @Bean
     @ConditionalOnMissingBean(IpSupport.class)

@@ -64,24 +64,23 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     }
 
     /**
-     * spring 跨域拦截器配置，在filter 中返回的情况无法生效
-     * 如果在拦截器之前生效需要配置 CorsFilter
+     * spring 跨域拦截器配置，如果在拦截器之前生效需要配置 CorsFilter
      *
      * @param registry
      * @see SparrowCorsFilter
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        if (this.sparrowConfig.getCors()==null||!this.sparrowConfig.getCors().isAllow()) {
-            logger.warn("cors config not found !");
-            return;
-        }
-        List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();
-        String[] allowedOriginArray = new String[allowedOrigins.size()];
-        allowedOrigins.toArray(allowedOriginArray);
-        registry.addMapping("/**")
-                .allowedOrigins(allowedOriginArray)
-                .allowCredentials(true)
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
+//        if (this.sparrowConfig.getCors()==null||!this.sparrowConfig.getCors().isAllow()) {
+//            logger.warn("cors config not found !");
+//            return;
+//        }
+//        List<String> allowedOrigins = this.sparrowConfig.getCors().getAllowedOrigins();
+//        String[] allowedOriginArray = new String[allowedOrigins.size()];
+//        allowedOrigins.toArray(allowedOriginArray);
+//        registry.addMapping("/**")
+//                .allowedOriginPatterns(allowedOriginArray)
+//                .allowCredentials(true)
+//                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").maxAge(3600).allowCredentials(true);
     }
 }

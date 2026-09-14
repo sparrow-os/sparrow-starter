@@ -1,6 +1,8 @@
 package com.sparrow.spring.config;
 
 import com.sparrow.datasource.DatasourceConfigReader;
+import com.sparrow.protocol.constant.Constant;
+import com.sparrow.protocol.constant.Extension;
 import com.sparrow.support.web.WebConfigReader;
 import com.sparrow.utility.RegexUtility;
 import lombok.Data;
@@ -65,8 +67,9 @@ public class SparrowConfig {
         private String loginUrl;
         private String imageExtension;
         //为兼容spring flash功能实现
-        private String templateEngineSuffix;
-        private String templateEnginePrefix;
+        private String templateEngineSuffix = Extension.HTML;
+        private String templateEnginePrefix = Constant.TEMPLATE_ENGINE_PREFIX;
+        private Integer actionUrlCacheExpiredSeconds=10;
         private String adminPage;
         private String errorPage;
         private String defaultWelcomePage;

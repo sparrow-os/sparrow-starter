@@ -1,6 +1,10 @@
 package com.sparrow.spring.mvc;
 
+import com.sparrow.constant.CacheNames;
 import com.sparrow.core.Pair;
+import com.sparrow.core.cache.Cache;
+import com.sparrow.core.cache.CacheRegistry;
+import com.sparrow.lang.url.UrlAssembler;
 import com.sparrow.protocol.POJO;
 import com.sparrow.protocol.Query;
 import com.sparrow.protocol.Result;
@@ -62,7 +66,7 @@ public class ModelAndViewUtils {
     public static Object flash(String key) {
         ServletUtility servletUtility = ServletUtility.getInstance();
         ServletContainer servletContainer = SpringContext.getContext().getBean(ServletContainer.class);
-        String flashUrl = servletUtility.assembleActualUrl(servletUtility.getActionKey(servletContainer.getRequest()));
+        String flashUrl = new UrlAssembler(servletUtility.getActionKey(servletContainer.getRequest())).assemble();
         Pair<String, Map<String, Object>> flash = (Pair<String, Map<String, Object>>) servletContainer.getRequest().getSession().getAttribute(Constant.FLASH_KEY);
         if (flash == null) {
             return null;
@@ -82,6 +86,7 @@ public class ModelAndViewUtils {
     }
 
     private static void flash(HttpServletRequest request, Result errorResult, String url) {
+        Cache<String,String> cache= CacheRegistry.getInstance().getObject(CacheNames.ACTION_URL_CACHE);
         Map<String, Object> result = new HashMap<>();
         ServletUtility servletUtility = ServletUtility.getInstance();
         Enumeration<String> attributes = request.getAttributeNames();
@@ -99,7 +104,7 @@ public class ModelAndViewUtils {
         }
         String referer = servletUtility.referer(request);
         result.put("ref", referer);
-        String flashUrl = servletUtility.assembleActualUrl(url != null ? url : referer);
+        String flashUrl = new UrlAssembler(url != null ? url : referer).assemble();
         if (errorResult != null) {
             result.put(Constant.FLASH_EXCEPTION_RESULT, errorResult);
         }
