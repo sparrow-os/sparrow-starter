@@ -1,15 +1,14 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
 import com.sparrow.servlet.CaptchaServlet;
+import com.sparrow.servlet.impl.MockCaptchaService;
 import com.sparrow.servlet.impl.SessionCaptchaService;
 import com.sparrow.spring.container.SpringServletContainer;
-import com.sparrow.spring.config.SparrowConfig;
 import com.sparrow.spring.redis.RedisCaptchaService;
 import com.sparrow.support.CaptchaService;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -29,6 +28,12 @@ public class CaptchaAutoConfiguration {
     @Autowired
     private SpringServletContainer springServletContainer;
 
+    @Bean
+    @ConditionalOnProperty(prefix = "sparrow", name = "captcha.service", havingValue = "mock")
+    @ConditionalOnMissingBean(CaptchaService.class)
+    public MockCaptchaService mockCaptchaService() {
+        return new MockCaptchaService();
+    }
 
     @Bean
     @ConditionalOnProperty(prefix = "sparrow", name = "captcha.service", havingValue = "session")
