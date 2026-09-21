@@ -12,3 +12,4 @@ com.sparrow.spring.starter.autoconfiguration.CaptchaAutoConfiguration.RedisCaptc
 com.sparrow.spring.starter.autoconfiguration.TemplateEngineAutoConfiguration
 com.sparrow.spring.starter.autoconfiguration.EnumsAutoConfiguration
 com.sparrow.spring.starter.autoconfiguration.FilterAutoConfiguration
+com.sparrow.spring.starter.autoconfiguration.OpenApiAutoConfiguration

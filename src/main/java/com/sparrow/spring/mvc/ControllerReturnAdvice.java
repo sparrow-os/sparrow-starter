@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -87,6 +88,11 @@ public class ControllerReturnAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object data, MethodParameter returnType, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest
             request, ServerHttpResponse response) {
+        // 下载场景(响应头设置了 attachment)不进行包装
+        String contentDisposition = response.getHeaders().getFirst(HttpHeaders.CONTENT_DISPOSITION);
+        if (contentDisposition != null && contentDisposition.toLowerCase().contains("attachment")) {
+            return data;
+        }
         // String类型不能直接包装
         if (returnType.getGenericParameterType().equals(String.class)) {
             ObjectMapper objectMapper = new ObjectMapper();

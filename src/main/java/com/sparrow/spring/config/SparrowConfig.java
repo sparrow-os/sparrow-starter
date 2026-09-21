@@ -12,7 +12,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.DependsOn;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @ConfigurationProperties(prefix = "sparrow")
@@ -53,9 +55,9 @@ public class SparrowConfig {
     @Data
     @ToString
     public static class Mvc implements WebConfigReader {
-        private List<String> autoMappingViewNames;
+        private Set<String> autoMappingViewNames;
         private Boolean supportTemplateEngine = false;
-        private List<String> ajaxPattens;
+        private Set<String> ajaxPattens;
         private String rootPath;
         private String passport;
         private String language;
@@ -69,7 +71,7 @@ public class SparrowConfig {
         //为兼容spring flash功能实现
         private String templateEngineSuffix = Extension.HTML;
         private String templateEnginePrefix = Constant.TEMPLATE_ENGINE_PREFIX;
-        private Integer actionUrlCacheExpiredSeconds=10;
+        private Integer actionUrlCacheExpiredSeconds = 10;
         private String adminPage;
         private String errorPage;
         private String defaultWelcomePage;
@@ -79,8 +81,8 @@ public class SparrowConfig {
         private String download;
         private String physicalDownload;
 
-        public void setAjaxPattens(List<String> ajaxPattens) {
-            this.ajaxPattens = RegexUtility.adapterWildcard(ajaxPattens);
+        public void setAjaxPattens(Set<String> ajaxPattens) {
+            this.ajaxPattens = new LinkedHashSet<>(RegexUtility.adapterWildcard(ajaxPattens));
         }
     }
 

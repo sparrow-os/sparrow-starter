@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.TemplateEngine;
 
-import java.util.List;
+import java.util.Set;
 
 @AutoConfigureAfter({SparrowConfig.class, ThymeleafProperties.class})
 @ConditionalOnClass(TemplateEngine.class)
@@ -29,7 +29,7 @@ public class TemplateEngineAutoConfiguration implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         String prefix = thymeleafProperties.getPrefix();
         //String suffix = thymeleafProperties.getSuffix();
-        List<String> viewNames = sparrowConfig.getMvc().getAutoMappingViewNames();
+        Set<String> viewNames = sparrowConfig.getMvc().getAutoMappingViewNames();
         for (String viewName : viewNames) {
             registry.addViewController(viewName).setViewName(viewName);
         }
