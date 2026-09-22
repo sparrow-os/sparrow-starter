@@ -26,17 +26,17 @@ public class SpringContainer extends SparrowContainer {
 
     @Override
     public <T> T getBean(String beanName) {
-        T o = (T)singletonRegistry.getObject(beanName);
-        if(o!=null){
+        T o = (T) singletonRegistry.getObject(beanName);
+        if (o != null) {
             return o;
         }
-        return  (T) SpringContext.getContext().getBean(beanName);
+        return (T) SpringContext.getContext().getBean(beanName);
     }
 
     @Override
     public <T> T getBean(Class<T> clazz) {
-        T o = (T)singletonRegistry.getObject(ClassUtility.getBeanNameByClass(clazz));
-        if(o!=null){
+        T o = (T) singletonRegistry.getObject(ClassUtility.getBeanNameByClass(clazz));
+        if (o != null) {
             return o;
         }
         ApplicationContext container = SpringContext.getContext();

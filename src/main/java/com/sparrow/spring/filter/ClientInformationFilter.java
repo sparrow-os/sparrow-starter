@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.sparrow.spring.filter;
 
 import com.sparrow.context.SessionContext;
@@ -41,7 +57,7 @@ public class ClientInformationFilter implements Filter {
         clientInformation.setChannel(request.getHeader(ClientInfoConstant.CHANNEL));
         clientInformation.setClientVersion(request.getHeader(ClientInfoConstant.CLIENT_VERSION));
 
-        if(request.getHeader(ClientInfoConstant.DEVICE_TYPE)!= null) {
+        if (request.getHeader(ClientInfoConstant.DEVICE_TYPE) != null) {
             clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.valueOf(request.getHeader(ClientInfoConstant.DEVICE_TYPE)));
         }
         clientInformation.setDevice(request.getHeader(ClientInfoConstant.DEVICE));
@@ -84,7 +100,7 @@ public class ClientInformationFilter implements Filter {
             clientInformation.setPlatform(Platform.PC);
             clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.PC);
         }
-        if(browser.getBrowserType().equals(BrowserType.MOBILE_BROWSER)){
+        if (browser.getBrowserType().equals(BrowserType.MOBILE_BROWSER)) {
             clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.MOBILE);
         }
 

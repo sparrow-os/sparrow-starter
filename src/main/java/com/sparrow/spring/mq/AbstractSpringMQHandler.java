@@ -21,9 +21,6 @@ import com.sparrow.mq.AbstractMQHandler;
 import com.sparrow.mq.MQEvent;
 import org.springframework.beans.factory.InitializingBean;
 
-/**
- * @author by harry
- */
 public abstract class AbstractSpringMQHandler<T extends MQEvent> extends AbstractMQHandler<T> implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
