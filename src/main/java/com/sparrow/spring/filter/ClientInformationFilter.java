@@ -26,6 +26,7 @@ import eu.bitwalker.useragentutils.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 
 @Slf4j
@@ -59,6 +60,8 @@ public class ClientInformationFilter implements Filter {
 
         if (request.getHeader(ClientInfoConstant.DEVICE_TYPE) != null) {
             clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.valueOf(request.getHeader(ClientInfoConstant.DEVICE_TYPE)));
+        } else {
+            clientInformation.setDeviceType(com.sparrow.protocol.enums.DeviceType.MOBILE);
         }
         clientInformation.setDevice(request.getHeader(ClientInfoConstant.DEVICE));
         clientInformation.setDeviceId(request.getHeader(ClientInfoConstant.DEVICE_ID));
