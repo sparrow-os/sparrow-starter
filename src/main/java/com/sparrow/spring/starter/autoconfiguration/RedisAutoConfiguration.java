@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,7 +32,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Slf4j
 @ConditionalOnClass(RedisTemplate.class)
-@AutoConfigureBefore(org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class)
+@AutoConfigureBefore(DataRedisAutoConfiguration.class)
 public class RedisAutoConfiguration {
     public RedisAutoConfiguration() {
         log.info("RedisAutoConfiguration init");

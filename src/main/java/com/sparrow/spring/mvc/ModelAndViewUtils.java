@@ -17,7 +17,7 @@
 package com.sparrow.spring.mvc;
 
 import com.sparrow.constant.CacheNames;
-import com.sparrow.core.Pair;
+import com.sparrow.protocol.Pair;
 import com.sparrow.core.cache.Cache;
 import com.sparrow.core.cache.CacheRegistry;
 import com.sparrow.lang.url.UrlAssembler;

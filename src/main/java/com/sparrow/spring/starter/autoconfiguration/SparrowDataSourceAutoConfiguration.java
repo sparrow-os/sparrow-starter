@@ -35,7 +35,7 @@ public class SparrowDataSourceAutoConfiguration {
 
 
     /**
-     * <pre>
+     * <pre>{@code
      *     private String[] getNames(Map<String, Object> annotationAttributes) {
      *             String[] value = (String[])((String[])annotationAttributes.get("value"));
      *             String[] name = (String[])((String[])annotationAttributes.get("name"));
@@ -46,7 +46,7 @@ public class SparrowDataSourceAutoConfiguration {
      *             Assert.state(value.length == 0 || name.length == 0, "The name and value attributes of @ConditionalOnProperty are exclusive");
      *             return value.length > 0 ? value : name;
      *         }
-     * </pre>
+     * }</pre>
      *
      * @return
      */

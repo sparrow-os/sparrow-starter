@@ -31,6 +31,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
+
 @AutoConfigureAfter(SparrowConfig.class)
 public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
@@ -43,14 +44,14 @@ public class MvcConfigurerAdapter implements WebMvcConfigurer {
     private SparrowConfig sparrowConfig;
 
     /**
-     * <pre>
+     * <pre>{@code
      *     HttpMessageConvertersAutoConfiguration
      *     @Bean
      *     @ConditionalOnMissingBean
      *     public HttpMessageConverters messageConverters(ObjectProvider<HttpMessageConverter<?>> converters) {
      *         return new HttpMessageConverters((Collection)converters.orderedStream().collect(Collectors.toList()));
      *     }
-     * </pre>
+     * }</pre>
      * 会自动配置 下文不需要
      *
      * @param converters

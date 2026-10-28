@@ -25,8 +25,8 @@
             <artifactId>sparrow</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sparrowzoo</groupId>
-            <artifactId>sparrow-protocol-mq</artifactId>
+            <groupId>com.sparrowzoo.messaging</groupId>
+            <artifactId>messaging-protocol</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -62,7 +62,7 @@
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid-spring-boot-4-starter</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

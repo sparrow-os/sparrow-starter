@@ -16,7 +16,7 @@
  */
 package com.sparrow.spring.filter;
 
-import com.sparrow.core.Pair;
+import com.sparrow.protocol.Pair;
 import com.sparrow.lang.url.UrlMatcher;
 import com.sparrow.protocol.constant.Constant;
 import com.sparrow.support.web.ServletUtility;
@@ -39,8 +39,7 @@ public class FlashFilter extends OncePerRequestFilter implements Filter {
     private static ServletUtility servletUtility = ServletUtility.getInstance();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String actionKey = servletUtility.getActionKey(request);
         Pair<String, Map<String, Object>> sessionPair = (Pair<String, Map<String, Object>>) request.getSession().getAttribute(Constant.FLASH_KEY);
         if (sessionPair == null) {
@@ -65,7 +64,7 @@ public class FlashFilter extends OncePerRequestFilter implements Filter {
      * @param request
      * @return
      * @throws ServletException
-     * @see https://github.com/spring-projects/spring-boot/issues/7426
+     * @see <a href="https://github.com/spring-projects/spring-boot/issues/7426">spring-boot issue 7426</a>
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {

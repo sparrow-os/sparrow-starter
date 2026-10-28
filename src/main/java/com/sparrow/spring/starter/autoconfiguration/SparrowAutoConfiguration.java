@@ -25,13 +25,11 @@ import com.sparrow.email.EmailSender;
 import com.sparrow.image.ImageExtractorRegistry;
 import com.sparrow.io.FileService;
 import com.sparrow.io.impl.JDKFileService;
-import com.sparrow.mq.DefaultQueueHandlerMappingContainer;
-import com.sparrow.mq.EventHandlerMappingContainer;
 import com.sparrow.protocol.BeanCopier;
 import com.sparrow.spring.Interceptor.FlashParamPrepareAspect;
+import com.sparrow.spring.config.SparrowConfig;
 import com.sparrow.spring.container.SpringContext;
 import com.sparrow.spring.container.SpringServletContainer;
-import com.sparrow.spring.config.SparrowConfig;
 import com.sparrow.spring.filter.monitor.Monitor;
 import com.sparrow.support.IpSupport;
 import com.sparrow.support.ip.SparrowIpSupport;
@@ -150,11 +148,5 @@ public class SparrowAutoConfiguration {
         public SpringContext springContext() {
             return new SpringContext();
         }
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(DefaultQueueHandlerMappingContainer.class)
-    public EventHandlerMappingContainer eventHandlerMappingContainer() {
-        return new DefaultQueueHandlerMappingContainer();
     }
 }

@@ -17,8 +17,8 @@
 package com.sparrow.spring.starter.autoconfiguration;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper;
+import com.alibaba.druid.spring.boot4.autoconfigure.DruidDataSourceAutoConfigure;
+import com.alibaba.druid.spring.boot4.autoconfigure.DruidDataSourceWrapper;
 import com.sparrow.spring.config.SparrowConfig;
 import com.sparrow.spring.datasource.druid.DruidCustomPasswordCallback;
 import jakarta.inject.Inject;
